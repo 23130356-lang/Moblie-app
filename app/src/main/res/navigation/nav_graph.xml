@@ -37,6 +37,21 @@
     <fragment
         android:id="@+id/dashboardFragment"
         android:name="com.example.moblie_app.ui.dashboard.DashboardFragment"
-        android:label="Tổng quan" />
+        android:label="Tổng quan">
+        <action
+            android:id="@+id/action_dashboard_to_profile"
+            app:destination="@id/profileFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.example.moblie_app.ui.profile.ProfileFragment"
+        android:label="Hồ sơ cá nhân">
+        <action
+            android:id="@+id/action_profile_to_dashboard"
+            app:destination="@id/dashboardFragment"
+            app:popUpTo="@id/dashboardFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
 
 </navigation>

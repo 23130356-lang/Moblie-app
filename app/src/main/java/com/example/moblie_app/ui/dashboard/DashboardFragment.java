@@ -4,31 +4,52 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
+import com.example.moblie_app.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-/**
- * DashboardFragment - TV1 sẽ hoàn thiện màn hình này.
- * Hiện tại chỉ là placeholder sau khi đăng nhập thành công.
- */
 public class DashboardFragment extends Fragment {
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        TextView tv = new TextView(requireContext());
-        tv.setPadding(48, 96, 48, 48);
-        tv.setTextSize(18f);
+
+        LinearLayout layout = new LinearLayout(requireContext());
+        layout.setOrientation(LinearLayout.VERTICAL);
+        layout.setPadding(48, 96, 48, 48);
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        String name = user != null ? user.getDisplayName() : "bạn";
-        tv.setText("Chào mừng " + name + "!\n\nĐăng nhập thành công ✅\n\nDashboard đang được xây dựng...");
-        return tv;
+        String name = user != null && user.getDisplayName() != null
+                ? user.getDisplayName() : "bạn";
+
+        TextView tv = new TextView(requireContext());
+        tv.setTextSize(18f);
+        tv.setText("Chào mừng " + name + "!\n\nDashboard đang được xây dựng...");
+        layout.addView(tv);
+
+        // Nút mở màn hình Profile
+        Button btnProfile = new Button(requireContext());
+        btnProfile.setText("Xem hồ sơ cá nhân");
+        btnProfile.setOnClickListener(v ->
+                Navigation.findNavController(v)
+                        .navigate(R.id.action_dashboard_to_profile));
+
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT);
+        params.topMargin = 48;
+        btnProfile.setLayoutParams(params);
+        layout.addView(btnProfile);
+
+        return layout;
     }
 }
