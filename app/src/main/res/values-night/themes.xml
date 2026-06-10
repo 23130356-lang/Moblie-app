@@ -1,7 +1,15 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
     <style name="Base.Theme.Moblie_app" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your dark theme here. -->
-        <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+        <item name="colorPrimary">#2ECC8A</item>
+        <item name="colorOnPrimary">#FFFFFF</item>
+        <item name="colorPrimaryContainer">#0D3B2E</item>
+        <item name="colorOnPrimaryContainer">#A8F0CF</item>
+        <item name="colorSurface">#0F1F19</item>
+        <item name="colorOnSurface">#E0F5EC</item>
+        <item name="colorOnSurfaceVariant">#7FB89A</item>
+        <item name="android:colorBackground">#0A1912</item>
+        <item name="colorError">#FF7070</item>
+        <item name="android:windowBackground">#0A1912</item>
     </style>
 </resources>
