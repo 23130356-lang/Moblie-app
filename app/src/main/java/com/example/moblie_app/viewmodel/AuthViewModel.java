@@ -5,11 +5,7 @@ import androidx.lifecycle.MutableLiveData;
 import com.example.moblie_app.model.UserModel;
 import com.example.moblie_app.repository.AuthRepository;
 
-/**
- * AuthViewModel - TV1 phụ trách.
- * Trung gian giữa AuthFragment/LoginFragment và AuthRepository.
- * Extends BaseViewModel để có sẵn isLoading và errorMessage.
- */
+
 public class AuthViewModel extends BaseViewModel {
 
     private final AuthRepository repository;
@@ -27,13 +23,11 @@ public class AuthViewModel extends BaseViewModel {
 
     /**
      * Gọi từ RegisterFragment khi người dùng nhấn Đăng ký.
+     * isLoading được tắt bên trong Repository qua callback, không dùng observeForever.
      */
     public void register(String email, String password, String fullName) {
         setLoading(true);
-        repository.register(email, password, fullName, currentUser, errorMessage);
-        // isLoading sẽ tắt khi currentUser hoặc errorMessage nhận giá trị
-        currentUser.observeForever(user -> setLoading(false));
-        errorMessage.observeForever(err -> setLoading(false));
+        repository.register(email, password, fullName, currentUser, errorMessage, isLoading);
     }
 
     /**
@@ -41,7 +35,7 @@ public class AuthViewModel extends BaseViewModel {
      */
     public void login(String email, String password) {
         setLoading(true);
-        repository.login(email, password, currentUser, errorMessage);
+        repository.login(email, password, currentUser, errorMessage, isLoading);
     }
 
     /**
@@ -49,7 +43,7 @@ public class AuthViewModel extends BaseViewModel {
      */
     public void loginWithGoogle(String idToken) {
         setLoading(true);
-        repository.loginWithGoogle(idToken, currentUser, errorMessage);
+        repository.loginWithGoogle(idToken, currentUser, errorMessage, isLoading);
     }
 
     /**
