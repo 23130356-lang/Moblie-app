@@ -24,7 +24,8 @@ public class DashboardFragment extends Fragment {
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
-                             ViewGroup container, Bundle savedInstanceState) {
+                             ViewGroup container,
+                             Bundle savedInstanceState) {
         binding = FragmentDashboardBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
@@ -39,10 +40,14 @@ public class DashboardFragment extends Fragment {
         } else if (user != null && user.getEmail() != null) {
             name = user.getEmail();
         }
+
         binding.tvWelcome.setText("Chào mừng " + name);
+        binding.btnOpenProfile.setOnClickListener(v ->
+                Navigation.findNavController(v).navigate(R.id.action_dashboard_to_profile));
+        binding.btnOpenGoals.setOnClickListener(v ->
+                Navigation.findNavController(v).navigate(R.id.action_dashboard_to_goals));
         binding.btnOpenActivity.setOnClickListener(v ->
-                Navigation.findNavController(requireView())
-                        .navigate(R.id.action_dashboard_to_activity));
+                Navigation.findNavController(v).navigate(R.id.action_dashboard_to_activity));
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.example.moblie_app.ui.auth;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,8 +23,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
 
-import android.content.Intent;
-
 public class LoginFragment extends Fragment {
 
     private static final int RC_SIGN_IN = 100;
@@ -31,6 +30,9 @@ public class LoginFragment extends Fragment {
     private FragmentLoginBinding binding;
     private AuthViewModel viewModel;
     private GoogleSignInClient googleSignInClient;
+
+    // Guard tránh navigate nhiều lần khi LiveData re-emit
+    private boolean hasNavigated = false;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -42,6 +44,9 @@ public class LoginFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        // Reset guard mỗi lần Fragment được tạo lại
+        hasNavigated = false;
 
         viewModel = new ViewModelProvider(this).get(AuthViewModel.class);
 
@@ -59,14 +64,12 @@ public class LoginFragment extends Fragment {
     }
 
     private void observeViewModel() {
-        // Quan sát trạng thái loading
         viewModel.getIsLoading().observe(getViewLifecycleOwner(), isLoading -> {
             binding.progressBar.setVisibility(isLoading ? View.VISIBLE : View.GONE);
             binding.btnLogin.setEnabled(!isLoading);
             binding.btnGoogle.setEnabled(!isLoading);
         });
 
-        // Quan sát lỗi
         viewModel.getErrorMessage().observe(getViewLifecycleOwner(), error -> {
             if (error != null && !error.isEmpty()) {
                 binding.tvError.setVisibility(View.VISIBLE);
@@ -74,10 +77,10 @@ public class LoginFragment extends Fragment {
             }
         });
 
-        // Quan sát kết quả đăng nhập
+        // Guard hasNavigated: tránh navigate lại khi LiveData re-emit do back stack
         viewModel.getCurrentUser().observe(getViewLifecycleOwner(), user -> {
-            if (user != null) {
-                // Đăng nhập thành công -> chuyển sang Dashboard
+            if (user != null && !hasNavigated) {
+                hasNavigated = true;
                 Navigation.findNavController(requireView())
                         .navigate(R.id.action_login_to_dashboard);
             }
@@ -85,7 +88,6 @@ public class LoginFragment extends Fragment {
     }
 
     private void setupClickListeners() {
-        // Nút đăng nhập
         binding.btnLogin.setOnClickListener(v -> {
             String email    = binding.etEmail.getText().toString().trim();
             String password = binding.etPassword.getText().toString().trim();
@@ -96,13 +98,11 @@ public class LoginFragment extends Fragment {
             viewModel.login(email, password);
         });
 
-        // Nút đăng nhập Google
         binding.btnGoogle.setOnClickListener(v -> {
             Intent signInIntent = googleSignInClient.getSignInIntent();
             startActivityForResult(signInIntent, RC_SIGN_IN);
         });
 
-        // Link chuyển sang màn hình đăng ký
         binding.tvGoRegister.setOnClickListener(v ->
                 Navigation.findNavController(requireView())
                         .navigate(R.id.action_login_to_register));

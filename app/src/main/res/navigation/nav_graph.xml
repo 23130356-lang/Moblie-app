@@ -41,6 +41,37 @@
         <action
             android:id="@+id/action_dashboard_to_activity"
             app:destination="@id/activityFragment" />
+        <action
+            android:id="@+id/action_dashboard_to_profile"
+            app:destination="@id/profileFragment" />
+        <action
+            android:id="@+id/action_dashboard_to_goals"
+            app:destination="@id/healthGoalsFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.example.moblie_app.ui.profile.ProfileFragment"
+        android:label="Hồ sơ cá nhân">
+        <action
+            android:id="@+id/action_profile_to_dashboard"
+            app:destination="@id/dashboardFragment"
+            app:popUpTo="@id/dashboardFragment"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_profile_to_goals"
+            app:destination="@id/healthGoalsFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/healthGoalsFragment"
+        android:name="com.example.moblie_app.ui.goals.HealthGoalsFragment"
+        android:label="Mục tiêu sức khỏe">
+        <action
+            android:id="@+id/action_goals_to_dashboard"
+            app:destination="@id/dashboardFragment"
+            app:popUpTo="@id/dashboardFragment"
+            app:popUpToInclusive="true" />
     </fragment>
 
     <fragment
