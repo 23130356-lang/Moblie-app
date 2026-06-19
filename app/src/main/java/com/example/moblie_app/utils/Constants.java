@@ -38,6 +38,7 @@ public class Constants {
     public static final String ACTIVITY_SWIMMING = "swimming";
     public static final String ACTIVITY_YOGA     = "yoga";
     public static final String ACTIVITY_GYM      = "gym";
+    public static final String ACTIVITY_STEPS    = "steps";
 
     // ==================== Intent Keys ====================
     public static final String EXTRA_DATE     = "extra_date";
