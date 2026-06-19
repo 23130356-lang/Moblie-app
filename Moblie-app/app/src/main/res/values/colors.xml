@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+
+    <!-- Health App Primary Palette -->
+    <color name="health_green_primary">#2ECC8A</color>
+    <color name="health_green_dark">#0D3B2E</color>
+    <color name="health_green_medium">#1A7A55</color>
+    <color name="health_green_light">#E8F8F2</color>
+    <color name="health_green_surface">#F2FCF8</color>
+
+    <!-- Neutrals -->
+    <color name="health_text_primary">#0D1F1A</color>
+    <color name="health_text_secondary">#526B60</color>
+    <color name="health_text_hint">#9DB8AD</color>
+    <color name="health_divider">#D9EDE5</color>
+    <color name="health_card_bg">#FFFFFF</color>
+    <color name="health_bg">#F5FCF9</color>
+
+    <!-- Semantic -->
+    <color name="health_error">#E05454</color>
+    <color name="health_success">#2ECC8A</color>
+    <color name="health_warning">#F5A623</color>
+</resources>
