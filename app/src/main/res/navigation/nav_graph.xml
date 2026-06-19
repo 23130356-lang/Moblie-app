@@ -37,6 +37,15 @@
     <fragment
         android:id="@+id/dashboardFragment"
         android:name="com.example.moblie_app.ui.dashboard.DashboardFragment"
-        android:label="Tổng quan" />
+        android:label="Tổng quan">
+        <action
+            android:id="@+id/action_dashboard_to_activity"
+            app:destination="@id/activityFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/activityFragment"
+        android:name="com.example.moblie_app.ui.activity.ActivityFragment"
+        android:label="Vận động &amp; Cân nặng" />
 
 </navigation>

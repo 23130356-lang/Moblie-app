@@ -4,31 +4,50 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
+import com.example.moblie_app.R;
+import com.example.moblie_app.databinding.FragmentDashboardBinding;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 /**
- * DashboardFragment - TV1 sẽ hoàn thiện màn hình này.
- * Hiện tại chỉ là placeholder sau khi đăng nhập thành công.
+ * DashboardFragment - màn hình tổng quan sau đăng nhập.
  */
 public class DashboardFragment extends Fragment {
+
+    private FragmentDashboardBinding binding;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        TextView tv = new TextView(requireContext());
-        tv.setPadding(48, 96, 48, 48);
-        tv.setTextSize(18f);
+        binding = FragmentDashboardBinding.inflate(inflater, container, false);
+        return binding.getRoot();
+    }
 
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        String name = user != null ? user.getDisplayName() : "bạn";
-        tv.setText("Chào mừng " + name + "!\n\nĐăng nhập thành công ✅\n\nDashboard đang được xây dựng...");
-        return tv;
+        String name = "bạn";
+        if (user != null && user.getDisplayName() != null && !user.getDisplayName().isEmpty()) {
+            name = user.getDisplayName();
+        } else if (user != null && user.getEmail() != null) {
+            name = user.getEmail();
+        }
+        binding.tvWelcome.setText("Chào mừng " + name);
+        binding.btnOpenActivity.setOnClickListener(v ->
+                Navigation.findNavController(requireView())
+                        .navigate(R.id.action_dashboard_to_activity));
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
     }
 }
