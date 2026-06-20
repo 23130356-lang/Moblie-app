@@ -2,4 +2,14 @@
     <string name="app_name">Moblie_app</string>
     <string name="default_web_client_id">YOUR_WEB_CLIENT_ID</string>
 
+    <!-- AI Chat -->
+    <string name="ai_chat_title">AI tư vấn sức khỏe</string>
+    <string name="ai_chat_clear">Xóa hội thoại</string>
+    <string name="ai_chat_input_hint">Hỏi về dinh dưỡng, vận động, giấc ngủ…</string>
+    <string name="ai_chat_send">Gửi</string>
+    <string name="ai_chat_empty_title">Xin chào! 👋</string>
+    <string name="ai_chat_empty_subtitle">Hãy đặt câu hỏi về sức khỏe, dinh dưỡng hoặc thói quen tập luyện của bạn.</string>
+    <string name="ai_chat_fab_desc">Mở AI tư vấn sức khỏe</string>
+    <string name="cd_back">Quay lại</string>
+
 </resources>

@@ -1,0 +1,17 @@
+# ============================================================
+# HƯỚNG DẪN CẤU HÌNH GROQ API KEY
+# ============================================================
+# File "local.properties" thật của bạn đã có sẵn dòng GROQ_API_KEY
+# (xem cùng thư mục). Chỉ cần mở local.properties và thay
+# "your_groq_api_key_here" bằng API key thật.
+#
+# Lấy API key tại: https://console.groq.com/keys
+#
+# KHÔNG bao giờ commit file "local.properties" lên Git/GitHub.
+# Chỉ file .example này (không chứa key thật) nên được commit.
+#
+# Nếu bạn lỡ dán key thật vào đâu đó công khai (chat, GitHub, ảnh
+# chụp màn hình...), hãy vào console.groq.com/keys thu hồi (revoke)
+# key đó ngay và tạo key mới.
+# ============================================================
+GROQ_API_KEY=your_groq_api_key_here

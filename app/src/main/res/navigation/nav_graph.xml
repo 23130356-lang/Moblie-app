@@ -79,4 +79,14 @@
         android:name="com.example.moblie_app.ui.activity.ActivityFragment"
         android:label="Vận động &amp; Cân nặng" />
 
+    <fragment
+        android:id="@+id/aiChatFragment"
+        android:name="com.example.moblie_app.ui.aichat.AiChatFragment"
+        android:label="AI tư vấn sức khỏe" />
+
+    <!-- Action toàn cục: cho phép mở AI Chat từ bất kỳ màn hình nào (FAB ở MainActivity) -->
+    <action
+        android:id="@+id/action_global_aiChatFragment"
+        app:destination="@id/aiChatFragment" />
+
 </navigation>

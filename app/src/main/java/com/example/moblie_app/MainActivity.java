@@ -13,6 +13,9 @@ public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
 
+    // Các màn hình KHÔNG hiện FAB "AI tư vấn sức khỏe":
+    // - login/register (chưa đăng nhập)
+    // - aiChatFragment (đang ở chính màn hình đó rồi)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,5 +35,20 @@ public class MainActivity extends AppCompatActivity {
             graph.setStartDestination(R.id.dashboardFragment);
             navController.setGraph(graph);
         }
+
+        setupAiChatFab(navController);
+    }
+
+    private void setupAiChatFab(NavController navController) {
+        binding.fabAiChat.setOnClickListener(v ->
+                navController.navigate(R.id.action_global_aiChatFragment));
+
+        navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
+            int id = destination.getId();
+            boolean shouldShow = id != R.id.loginFragment
+                    && id != R.id.registerFragment
+                    && id != R.id.aiChatFragment;
+            binding.fabAiChat.setVisibility(shouldShow ? android.view.View.VISIBLE : android.view.View.GONE);
+        });
     }
 }
