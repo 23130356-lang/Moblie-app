@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <style name="Base.Theme.Moblie_app" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/health_green_primary</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorPrimaryContainer">@color/health_green_light</item>
+        <item name="colorOnPrimaryContainer">@color/health_green_dark</item>
+        <item name="colorSecondary">@color/health_green_medium</item>
+        <item name="colorSurface">@color/health_bg</item>
+        <item name="colorOnSurface">@color/health_text_primary</item>
+        <item name="colorOnSurfaceVariant">@color/health_text_secondary</item>
+        <item name="colorError">@color/health_error</item>
+        <item name="android:colorBackground">@color/health_bg</item>
+        <item name="android:windowBackground">@color/health_bg</item>
+        <item name="android:fontFamily">sans-serif</item>
+    </style>
+
+    <style name="Theme.Moblie_app" parent="Base.Theme.Moblie_app" />
+
+    <!-- Circle image shape -->
+    <style name="CircleImageView" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
+    </style>
+
+    <!-- Card style - modern M3: bo góc lớn, đổ bóng nhẹ, KHÔNG viền -->
+    <style name="HealthCard" parent="Widget.Material3.CardView.Elevated">
+        <item name="cardCornerRadius">20dp</item>
+        <item name="cardElevation">2dp</item>
+        <item name="strokeWidth">0dp</item>
+        <item name="cardBackgroundColor">@color/health_card_bg</item>
+    </style>
+
+    <!-- Small info card không viền -->
+    <style name="HealthCard.Small" parent="Widget.Material3.CardView.Elevated">
+        <item name="cardCornerRadius">16dp</item>
+        <item name="cardElevation">1dp</item>
+        <item name="strokeWidth">0dp</item>
+        <item name="cardBackgroundColor">@color/health_card_bg</item>
+    </style>
+
+    <!-- Filled input style -->
+    <style name="HealthTextInputLayout" parent="Widget.Material3.TextInputLayout.FilledBox">
+        <item name="boxCornerRadiusTopStart">14dp</item>
+        <item name="boxCornerRadiusTopEnd">14dp</item>
+        <item name="boxCornerRadiusBottomStart">14dp</item>
+        <item name="boxCornerRadiusBottomEnd">14dp</item>
+        <item name="boxBackgroundColor">@color/health_green_light</item>
+        <item name="boxStrokeColor">@color/health_green_primary</item>
+        <item name="hintTextColor">@color/health_text_secondary</item>
+    </style>
+
+    <!-- Primary button -->
+    <style name="HealthButton.Primary" parent="Widget.Material3.Button">
+        <item name="android:minHeight">56dp</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:letterSpacing">0.02</item>
+        <item name="android:textStyle">bold</item>
+        <item name="cornerRadius">28dp</item>
+        <item name="backgroundTint">@color/health_green_primary</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <!-- Outlined button -->
+    <style name="HealthButton.Outlined" parent="Widget.Material3.Button.OutlinedButton">
+        <item name="android:minHeight">56dp</item>
+        <item name="android:textSize">15sp</item>
+        <item name="cornerRadius">28dp</item>
+        <item name="strokeColor">@color/health_divider</item>
+        <item name="android:textColor">@color/health_text_primary</item>
+    </style>
+
+</resources>

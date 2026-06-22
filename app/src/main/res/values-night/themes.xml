@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Base.Theme.Moblie_app" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/health_green_primary</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorPrimaryContainer">@color/health_green_light</item>
+        <item name="colorOnPrimaryContainer">@color/health_green_primary</item>
+        <item name="colorSecondary">@color/health_green_medium</item>
+        <item name="colorSurface">@color/health_bg</item>
+        <item name="colorOnSurface">@color/health_text_primary</item>
+        <item name="colorOnSurfaceVariant">@color/health_text_secondary</item>
+        <item name="android:colorBackground">@color/health_bg</item>
+        <item name="android:windowBackground">@color/health_bg</item>
+        <item name="colorError">@color/health_error</item>
+    </style>
+</resources>

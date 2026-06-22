@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Health App Primary Palette - Dark Mode -->
+    <color name="health_green_primary">#2ECC8F</color>
+    <color name="health_green_dark">#0A2B22</color>
+    <color name="health_green_medium">#4DD9A4</color>
+    <color name="health_green_light">#1A4D3C</color>
+    <color name="health_green_surface">#0D3328</color>
+
+    <!-- Neutrals -->
+    <color name="health_text_primary">#F2FFF8</color>
+    <color name="health_text_secondary">#B8D6C8</color>
+    <color name="health_text_hint">#6A9E8A</color>
+    <color name="health_divider">#1F4D3C</color>
+    <color name="health_card_bg">#10352C</color>
+    <color name="health_bg">#071F1A</color>
+
+    <!-- Semantic -->
+    <color name="health_error">#FF8A80</color>
+    <color name="health_success">#2ECC8F</color>
+    <color name="health_warning">#FFD54F</color>
+
+    <!-- Macro Nutrient Colors - Dark Mode (sáng hơn) -->
+    <color name="health_calorie">#FFB74D</color>
+    <color name="health_protein">#64B5F6</color>
+    <color name="health_carbs">#FFD54F</color>
+    <color name="health_fat">#CE93D8</color>
+    <color name="health_ai">#81C784</color>
+
+    <!-- Soft backgrounds for macro - Dark Mode (tối hơn, vừa phải) -->
+    <color name="health_calorie_bg">#3D2E1A</color>
+    <color name="health_protein_bg">#1A2D3D</color>
+    <color name="health_carbs_bg">#3D321A</color>
+    <color name="health_fat_bg">#2D1A3D</color>
+
+    <!-- Chat bubble colors - AI -->
+    <color name="health_chat_bg_ai">#1E3D33</color>
+    <color name="health_chat_text_ai">#E8F5EC</color>
+
+    <!-- Chat bubble colors - Error -->
+    <color name="health_chat_bg_error">#3D1A1A</color>
+    <color name="health_chat_text_error">#FFB4A2</color>
+
+    <!-- Chat input bar -->
+    <color name="health_chat_input_stroke">#3A7D63</color>
+</resources>
