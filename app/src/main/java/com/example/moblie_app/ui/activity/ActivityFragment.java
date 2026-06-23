@@ -96,7 +96,7 @@ public class ActivityFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         viewModel = new ViewModelProvider(
                 this,
-                new ActivityViewModel.Factory(requireContext()))
+                new ActivityViewModel.Factory(requireActivity().getApplication()))
                 .get(ActivityViewModel.class);
         googleFitRepository = new GoogleFitRepository();
         fitnessOptions = FitnessOptions.builder()
@@ -297,7 +297,7 @@ public class ActivityFragment extends Fragment {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             requireContext().registerReceiver(stepReceiver, filter, Context.RECEIVER_NOT_EXPORTED);
         } else {
-            requireContext().registerReceiver(stepReceiver, filter);
+            ContextCompat.registerReceiver(requireContext(), stepReceiver, filter, ContextCompat.RECEIVER_NOT_EXPORTED);
         }
         receiverRegistered = true;
     }

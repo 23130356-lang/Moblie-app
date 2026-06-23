@@ -3,6 +3,7 @@ package com.example.moblie_app.viewmodel;
 import android.content.Context;
 
 import androidx.annotation.NonNull;
+import android.app.Application;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
@@ -30,8 +31,10 @@ public class ActivityViewModel extends BaseViewModel {
     private final MutableLiveData<Boolean> actionDone = new MutableLiveData<>(false);
     private final MutableLiveData<Integer> liveSteps = new MutableLiveData<>(0);
 
-    public ActivityViewModel(Context context) {
-        repository = new ActivityRepository(context.getApplicationContext());
+    // FIX: thay Context bằng Application và gọi super(application)
+    public ActivityViewModel(@NonNull Application application) {
+        super(application);
+        repository = new ActivityRepository(getAppContext());
     }
 
     public MutableLiveData<List<ActivityLogModel>> getActivityLogs() {
@@ -168,11 +171,12 @@ public class ActivityViewModel extends BaseViewModel {
         }
     }
 
+    // FIX: Factory dùng Application thay vì Context
     public static class Factory implements ViewModelProvider.Factory {
-        private final Context context;
+        private final Application application;
 
-        public Factory(Context context) {
-            this.context = context.getApplicationContext();
+        public Factory(Application application) {
+            this.application = application;
         }
 
         @NonNull
@@ -180,7 +184,7 @@ public class ActivityViewModel extends BaseViewModel {
         @SuppressWarnings("unchecked")
         public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
             if (modelClass.isAssignableFrom(ActivityViewModel.class)) {
-                return (T) new ActivityViewModel(context);
+                return (T) new ActivityViewModel(application);
             }
             throw new IllegalArgumentException("Unknown ViewModel class: " + modelClass.getName());
         }

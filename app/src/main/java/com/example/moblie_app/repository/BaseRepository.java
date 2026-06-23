@@ -13,7 +13,8 @@ public class BaseRepository {
     public BaseRepository() {
         auth    = FirebaseAuth.getInstance();
         db      = FirebaseFirestore.getInstance();
-        storage = FirebaseStorage.getInstance();
+        // FIX: Chỉ định rõ bucket URL để tránh lỗi "Object does not exist at location"
+        storage = FirebaseStorage.getInstance("gs://mobile-app-4b905.firebasestorage.app");
     }
 
     protected String getCurrentUserId() {

@@ -1,5 +1,7 @@
 package com.example.moblie_app.viewmodel;
 
+import android.app.Application;
+import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.moblie_app.model.UserModel;
@@ -13,7 +15,8 @@ public class AuthViewModel extends BaseViewModel {
     // LiveData trả kết quả đăng nhập/đăng ký về UI
     private final MutableLiveData<UserModel> currentUser = new MutableLiveData<>();
 
-    public AuthViewModel() {
+    public AuthViewModel(@NonNull Application application) {
+        super(application);
         repository = new AuthRepository();
     }
 

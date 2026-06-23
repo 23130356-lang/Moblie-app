@@ -1,0 +1,73 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="100dp"
+    android:height="100dp"
+    android:viewportWidth="100"
+    android:viewportHeight="100">
+
+    <!-- Background circle -->
+    <path
+        android:fillColor="#E3F2FD"
+        android:pathData="M50,50m-50,0a50,50 0,1 1,100 0a50,50 0,1 1,-100 0" />
+
+    <!-- Head -->
+    <path
+        android:fillColor="#FFCC80"
+        android:pathData="M50,18m-11,0a11,11 0,1 1,22 0a11,11 0,1 1,-22 0" />
+
+    <!-- Neck -->
+    <path
+        android:fillColor="#FFCC80"
+        android:pathData="M46,28 L54,28 L54,34 L46,34 Z" />
+
+    <!-- Slim body -->
+    <path
+        android:fillColor="#1565C0"
+        android:pathData="M39,34 Q50,32 61,34 L63,62 L50,64 L37,62 Z" />
+
+    <!-- Left arm (slim) -->
+    <path
+        android:fillColor="#1565C0"
+        android:pathData="M39,35 L33,35 L30,56 L36,57 Z" />
+
+    <!-- Right arm (slim) -->
+    <path
+        android:fillColor="#1565C0"
+        android:pathData="M61,35 L67,35 L70,56 L64,57 Z" />
+
+    <!-- Left hand -->
+    <path
+        android:fillColor="#FFCC80"
+        android:pathData="M30,56m-4,0a4,4 0,1 1,8 0a4,4 0,1 1,-8 0" />
+
+    <!-- Right hand -->
+    <path
+        android:fillColor="#FFCC80"
+        android:pathData="M70,56m-4,0a4,4 0,1 1,8 0a4,4 0,1 1,-8 0" />
+
+    <!-- Left leg (slim) -->
+    <path
+        android:fillColor="#0D47A1"
+        android:pathData="M41,62 L47,62 L46,82 L40,82 Z" />
+
+    <!-- Right leg (slim) -->
+    <path
+        android:fillColor="#0D47A1"
+        android:pathData="M53,62 L59,62 L60,82 L54,82 Z" />
+
+    <!-- Left shoe -->
+    <path
+        android:fillColor="#37474F"
+        android:pathData="M37,80 L47,80 L47,85 L37,85 Z"
+        android:strokeWidth="0" />
+
+    <!-- Right shoe -->
+    <path
+        android:fillColor="#37474F"
+        android:pathData="M53,80 L63,80 L63,85 L53,85 Z" />
+
+    <!-- Hair -->
+    <path
+        android:fillColor="#5D4037"
+        android:pathData="M39,16 Q50,8 61,16 Q61,10 50,8 Q39,10 39,16 Z" />
+
+</vector>

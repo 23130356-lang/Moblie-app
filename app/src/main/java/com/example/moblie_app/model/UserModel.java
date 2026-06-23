@@ -10,7 +10,8 @@ public class UserModel {
     private String email;
     private String gender;       // "male" | "female" | "other"
     private String dateOfBirth;  // format: "dd/MM/yyyy"
-    private String avatarUrl;
+    private String avatarUrl;    // giữ lại để tương thích (không dùng nữa)
+    private String avatarKey;    // "male_thin" | "male_normal" | "male_fat" | "female_thin" | "female_normal" | "female_fat"
 
     // Mục tiêu sức khỏe
     private double targetWeight;  // kg
@@ -51,6 +52,9 @@ public class UserModel {
 
     public String getAvatarUrl() { return avatarUrl; }
     public void setAvatarUrl(String avatarUrl) { this.avatarUrl = avatarUrl; }
+
+    public String getAvatarKey() { return avatarKey; }
+    public void setAvatarKey(String avatarKey) { this.avatarKey = avatarKey; }
 
     public double getTargetWeight() { return targetWeight; }
     public void setTargetWeight(double targetWeight) { this.targetWeight = targetWeight; }

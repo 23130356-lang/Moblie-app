@@ -1,0 +1,85 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="100dp"
+    android:height="100dp"
+    android:viewportWidth="100"
+    android:viewportHeight="100">
+
+    <!-- Background circle -->
+    <path
+        android:fillColor="#FFF3E0"
+        android:pathData="M50,50m-50,0a50,50 0,1 1,100 0a50,50 0,1 1,-100 0" />
+
+    <!-- Head (slightly bigger) -->
+    <path
+        android:fillColor="#FFCC80"
+        android:pathData="M50,19m-13,0a13,13 0,1 1,26 0a13,13 0,1 1,-26 0" />
+
+    <!-- Chubby cheeks -->
+    <path
+        android:fillColor="#FFAB91"
+        android:pathData="M37,20m-4,0a4,3 0,1 1,8 0a4,3 0,1 1,-8 0" />
+    <path
+        android:fillColor="#FFAB91"
+        android:pathData="M63,20m-4,0a4,3 0,1 1,8 0a4,3 0,1 1,-8 0" />
+
+    <!-- Neck (short/wide) -->
+    <path
+        android:fillColor="#FFCC80"
+        android:pathData="M44,31 L56,31 L57,37 L43,37 Z" />
+
+    <!-- Wide body -->
+    <path
+        android:fillColor="#E65100"
+        android:pathData="M32,37 Q50,33 68,37 L72,65 L50,68 L28,65 Z" />
+
+    <!-- Belly bump -->
+    <path
+        android:fillColor="#EF6C00"
+        android:pathData="M36,52 Q50,60 64,52 Q64,65 50,68 Q36,65 36,52 Z" />
+
+    <!-- Left arm (chubby) -->
+    <path
+        android:fillColor="#E65100"
+        android:pathData="M32,38 L23,40 L20,60 L30,61 Z" />
+
+    <!-- Right arm (chubby) -->
+    <path
+        android:fillColor="#E65100"
+        android:pathData="M68,38 L77,40 L80,60 L70,61 Z" />
+
+    <!-- Left hand -->
+    <path
+        android:fillColor="#FFCC80"
+        android:pathData="M20,60m-5,0a5,4 0,1 1,10 0a5,4 0,1 1,-10 0" />
+
+    <!-- Right hand -->
+    <path
+        android:fillColor="#FFCC80"
+        android:pathData="M80,60m-5,0a5,4 0,1 1,10 0a5,4 0,1 1,-10 0" />
+
+    <!-- Left leg (wide) -->
+    <path
+        android:fillColor="#BF360C"
+        android:pathData="M38,65 L49,65 L48,83 L37,83 Z" />
+
+    <!-- Right leg (wide) -->
+    <path
+        android:fillColor="#BF360C"
+        android:pathData="M51,65 L62,65 L63,83 L52,83 Z" />
+
+    <!-- Left shoe -->
+    <path
+        android:fillColor="#37474F"
+        android:pathData="M34,81 L49,81 L49,86 L34,86 Z" />
+
+    <!-- Right shoe -->
+    <path
+        android:fillColor="#37474F"
+        android:pathData="M51,81 L66,81 L66,86 L51,86 Z" />
+
+    <!-- Hair -->
+    <path
+        android:fillColor="#3E2723"
+        android:pathData="M37,14 Q50,6 63,14 Q63,8 50,6 Q37,8 37,14 Z" />
+
+</vector>

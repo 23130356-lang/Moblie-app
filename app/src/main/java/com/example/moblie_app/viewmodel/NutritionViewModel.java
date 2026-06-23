@@ -1,6 +1,8 @@
 package com.example.moblie_app.viewmodel;
 
 import androidx.lifecycle.LiveData;
+import android.app.Application;
+import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.moblie_app.model.DailyNutritionSummary;
@@ -21,7 +23,8 @@ public class NutritionViewModel extends BaseViewModel {
     private final MutableLiveData<List<MealEntryModel>> entries = new MutableLiveData<>(new ArrayList<>());
     private final MutableLiveData<DailyNutritionSummary> dailySummary = new MutableLiveData<>(new DailyNutritionSummary());
 
-    public NutritionViewModel() {
+    public NutritionViewModel(@NonNull Application application) {
+        super(application);
         repository = new FoodDiaryRepository();
     }
 
