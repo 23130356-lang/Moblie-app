@@ -52,31 +52,30 @@
         <!-- Avatar preview (lớn, ở giữa) -->
         <FrameLayout
             android:id="@+id/fl_avatar_container"
-            android:layout_width="112dp"
-            android:layout_height="112dp"
-            android:layout_marginTop="162dp"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_marginTop="158dp"
+            android:background="@drawable/bg_avatar_ring"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent">
 
+            <!-- Nền trắng tròn bên trong, tạo khoảng trắng giữa ring và avatar -->
             <View
-                android:layout_width="112dp"
-                android:layout_height="112dp"
-                android:background="@drawable/bg_avatar_ring" />
+                android:layout_width="110dp"
+                android:layout_height="110dp"
+                android:layout_gravity="center"
+                android:background="@drawable/bg_avatar_white_circle" />
 
-            <View
+            <!-- Avatar nằm bên trong, nhỏ hơn ring 10dp mỗi bên -->
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/iv_avatar"
                 android:layout_width="106dp"
                 android:layout_height="106dp"
                 android:layout_gravity="center"
-                android:background="#FFFFFFFF" />
-
-            <com.google.android.material.imageview.ShapeableImageView
-                android:id="@+id/iv_avatar"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:layout_gravity="center"
-                android:scaleType="centerCrop"
+                android:scaleType="fitCenter"
                 android:src="@drawable/ic_avatar_placeholder"
+                android:clipToOutline="true"
                 app:shapeAppearanceOverlay="@style/CircleImageView" />
         </FrameLayout>
 
