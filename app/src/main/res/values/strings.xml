@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Moblie_app</string>
-    <string name="default_web_client_id">YOUR_WEB_CLIENT_ID</string>
-
     <!-- AI Chat -->
     <string name="ai_chat_title">AI tư vấn sức khỏe</string>
     <string name="ai_chat_clear">Xóa hội thoại</string>
