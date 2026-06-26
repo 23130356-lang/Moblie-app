@@ -28,8 +28,9 @@ public class CalorieChartViewModel extends BaseViewModel {
     private final MutableLiveData<List<Entry>>    monthEntries = new MutableLiveData<>(new ArrayList<>());
     private final MutableLiveData<List<String>>   monthLabels  = new MutableLiveData<>(new ArrayList<>());
 
-    public CalorieChartViewModel(Context context) {
-        repository = new CalorieChartRepository(context.getApplicationContext());
+    public CalorieChartViewModel(android.app.Application application) {
+        super(application);
+        repository = new CalorieChartRepository(application);
     }
 
     public MutableLiveData<Integer> getCalorieGoal()          { return calorieGoal; }
@@ -126,10 +127,10 @@ public class CalorieChartViewModel extends BaseViewModel {
     // Factory
     // ----------------------------------------------------------------
     public static class Factory implements ViewModelProvider.Factory {
-        private final Context context;
+        private final android.app.Application application;
 
         public Factory(Context context) {
-            this.context = context.getApplicationContext();
+            this.application = (android.app.Application) context.getApplicationContext();
         }
 
         @NonNull
@@ -137,7 +138,7 @@ public class CalorieChartViewModel extends BaseViewModel {
         @SuppressWarnings("unchecked")
         public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
             if (modelClass.isAssignableFrom(CalorieChartViewModel.class)) {
-                return (T) new CalorieChartViewModel(context);
+                return (T) new CalorieChartViewModel(application);
             }
             throw new IllegalArgumentException("Unknown ViewModel class: " + modelClass.getName());
         }

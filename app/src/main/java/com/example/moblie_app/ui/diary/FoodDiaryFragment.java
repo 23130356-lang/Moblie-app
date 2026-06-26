@@ -20,13 +20,17 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.example.moblie_app.R;
 import com.example.moblie_app.databinding.FragmentFoodDiaryBinding;
 import com.example.moblie_app.model.DailyNutritionSummary;
+import com.example.moblie_app.model.FavoriteFoodModel;
 import com.example.moblie_app.model.MealEntryModel;
 import com.example.moblie_app.model.MealSummary;
 import com.example.moblie_app.model.MacroNutrients;
 import com.example.moblie_app.utils.DateUtils;
+import com.example.moblie_app.viewmodel.FavoriteFoodViewModel;
 import com.example.moblie_app.viewmodel.NutritionViewModel;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
 
 public class FoodDiaryFragment extends Fragment {
@@ -34,7 +38,9 @@ public class FoodDiaryFragment extends Fragment {
     private FragmentFoodDiaryBinding binding;
     private FoodDiaryAdapter adapter;
     private NutritionViewModel viewModel;
+    private FavoriteFoodViewModel favViewModel;
     private String currentDate;
+    private List<String> favNames = new ArrayList<>();
 
     private static final double DAILY_KCAL_GOAL = 2000;
 
@@ -51,31 +57,41 @@ public class FoodDiaryFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         viewModel = new ViewModelProvider(this).get(NutritionViewModel.class);
+        favViewModel = new ViewModelProvider(
+                this,
+                new FavoriteFoodViewModel.Factory(requireContext()))
+                .get(FavoriteFoodViewModel.class);
 
         currentDate = DateUtils.getTodayKey();
         binding.tvSelectedDate.setText(DateUtils.getTodayDisplay());
 
-        adapter = new FoodDiaryAdapter(this::deleteMeal, this::showEditQuantityDialog);
+        adapter = new FoodDiaryAdapter(
+                this::deleteMeal,
+                this::showEditQuantityDialog,
+                this::onFavToggle);
         binding.rvFoodDiary.setLayoutManager(new LinearLayoutManager(requireContext()));
         binding.rvFoodDiary.setAdapter(adapter);
 
         observeViewModel();
 
+        favViewModel.getFavorites().observe(getViewLifecycleOwner(), favorites -> {
+            favNames = new ArrayList<>();
+            if (favorites != null) {
+                for (FavoriteFoodModel m : favorites) {
+                    if (m.getName() != null) favNames.add(m.getName().toLowerCase());
+                }
+            }
+            adapter.setFavoriteNames(favNames);
+        });
+
+        favViewModel.loadFavorites();
         viewModel.loadEntries(currentDate);
+    }
 
-        binding.btnPickDate.setOnClickListener(v -> showDatePicker());
-        binding.btnAddFood.setOnClickListener(v ->
-                Navigation.findNavController(v).navigate(R.id.action_foodDiary_to_searchFood));
-
-        Navigation.findNavController(requireView())
-                .getCurrentBackStackEntry()
-                .getSavedStateHandle()
-                .<Bundle>getLiveData("search_result")
-                .observe(getViewLifecycleOwner(), result -> {
-                    if (result != null && result.getBoolean("added", false)) {
-                        viewModel.loadEntries(currentDate);
-                    }
-                });
+    @Override
+    public void onResume() {
+        super.onResume();
+        favViewModel.loadFavorites();
     }
 
     private void observeViewModel() {
@@ -217,6 +233,17 @@ public class FoodDiaryFragment extends Fragment {
     private void deleteMeal(MealEntryModel meal) {
         if (meal.getId() == null) return;
         viewModel.deleteEntry(currentDate, meal.getId());
+    }
+
+    private void onFavToggle(MealEntryModel meal) {
+        String name = meal.getFoodName();
+        if (name == null) return;
+        if (favNames.contains(name.toLowerCase())) {
+            favViewModel.removeFavorite(name);
+        } else {
+            favViewModel.addFavorite(name, meal.getCalories(), meal.getProtein(),
+                    meal.getCarbs(), meal.getFat(), "Nhật ký ăn uống");
+        }
     }
 
     @Override

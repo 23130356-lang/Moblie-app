@@ -17,12 +17,14 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.moblie_app.databinding.FragmentSearchFoodBinding;
 import com.example.moblie_app.databinding.ItemSearchProductBinding;
+import com.example.moblie_app.model.FavoriteFoodModel;
 import com.example.moblie_app.model.MealEntryModel;
 import com.example.moblie_app.model.MacroNutrients;
 import com.example.moblie_app.network.of.NutrimentsModel;
@@ -30,6 +32,7 @@ import com.example.moblie_app.network.of.ProductModel;
 import com.example.moblie_app.repository.FoodRepository;
 import com.example.moblie_app.utils.Constants;
 import com.example.moblie_app.utils.DateUtils;
+import com.example.moblie_app.viewmodel.FavoriteFoodViewModel;
 import com.example.moblie_app.viewmodel.NutritionViewModel;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -44,8 +47,11 @@ public class SearchFoodFragment extends Fragment {
 
     private FragmentSearchFoodBinding binding;
     private FoodRepository foodRepository;
+    private FavoriteFoodViewModel favViewModel;
     private ProductSearchAdapter adapter;
     private ProductModel selectedProduct;
+
+    private List<FavoriteFoodModel> favoriteList = new ArrayList<>();
 
     private final ActivityResultLauncher<ScanOptions> barcodeLauncher = registerForActivityResult(
             new ScanContract(),
@@ -74,11 +80,23 @@ public class SearchFoodFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         foodRepository = new FoodRepository();
+        favViewModel = new ViewModelProvider(
+                this,
+                new FavoriteFoodViewModel.Factory(requireContext()))
+                .get(FavoriteFoodViewModel.class);
 
-        adapter = new ProductSearchAdapter(product -> {
-            selectedProduct = product;
-            showNutrition(product);
-            showMealEntryDialog(product);
+        adapter = new ProductSearchAdapter(new ProductSearchAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(ProductModel product) {
+                selectedProduct = product;
+                showNutrition(product);
+                showMealEntryDialog(product);
+            }
+        }, new ProductSearchAdapter.OnFavClickListener() {
+            @Override
+            public void onFavClick(ProductModel product) {
+                favViewModel.toggleFavorite(product);
+            }
         });
         binding.rvResults.setLayoutManager(new LinearLayoutManager(requireContext()));
         binding.rvResults.setAdapter(adapter);
@@ -99,6 +117,31 @@ public class SearchFoodFragment extends Fragment {
             }
             return false;
         });
+
+        // Theo dõi danh sách yêu thích
+        favViewModel.getFavorites().observe(getViewLifecycleOwner(), favorites -> {
+            favoriteList = favorites != null ? favorites : new ArrayList<>();
+            adapter.setFavoriteNames(toNameSet(favoriteList));
+            // Nếu đang hiển thị kết quả, cập nhật lại trạng thái tim
+            adapter.notifyDataSetChanged();
+            updateFavSection();
+        });
+
+        favViewModel.getActionDone().observe(getViewLifecycleOwner(), done -> {
+            if (Boolean.TRUE.equals(done)) {
+                favViewModel.onActionHandled();
+            }
+        });
+
+        favViewModel.loadFavorites();
+    }
+
+    private List<String> toNameSet(List<FavoriteFoodModel> list) {
+        List<String> names = new ArrayList<>();
+        for (FavoriteFoodModel m : list) {
+            if (m.getName() != null) names.add(m.getName().toLowerCase());
+        }
+        return names;
     }
 
     private void performSearch() {
@@ -110,11 +153,13 @@ public class SearchFoodFragment extends Fragment {
         }
 
         binding.tvError.setVisibility(View.GONE);
-        binding.tvEmpty.setVisibility(View.GONE);
         binding.rvResults.setVisibility(View.GONE);
         binding.tvSectionResults.setVisibility(View.GONE);
         binding.cardNutrition.setVisibility(View.GONE);
         binding.progressBar.setVisibility(View.VISIBLE);
+
+        // Lọc yêu thích trùng với query
+        updateFavSection();
 
         foodRepository.searchByName(query, new FoodRepository.SearchCallback() {
             @Override
@@ -135,6 +180,27 @@ public class SearchFoodFragment extends Fragment {
                 binding.tvEmpty.setVisibility(View.VISIBLE);
             }
         });
+    }
+
+    private void updateFavSection() {
+        String query = binding.etSearch.getText().toString().trim().toLowerCase();
+        boolean hasFavs = false;
+        if (!query.isEmpty()) {
+            for (FavoriteFoodModel m : favoriteList) {
+                if (m.getName() != null && m.getName().toLowerCase().contains(query)) {
+                    hasFavs = true;
+                    break;
+                }
+            }
+        } else {
+            hasFavs = !favoriteList.isEmpty();
+        }
+
+        if (hasFavs) {
+            binding.tvSectionFavorites.setVisibility(View.VISIBLE);
+        } else {
+            binding.tvSectionFavorites.setVisibility(View.GONE);
+        }
     }
 
     private void startBarcodeScan() {
@@ -315,6 +381,9 @@ public class SearchFoodFragment extends Fragment {
         binding = null;
     }
 
+    // ============================================================
+    // ProductSearchAdapter (nội bộ, tích hợp nút yêu thích)
+    // ============================================================
     private static class ProductSearchAdapter
             extends RecyclerView.Adapter<ProductSearchAdapter.ViewHolder> {
 
@@ -322,11 +391,19 @@ public class SearchFoodFragment extends Fragment {
             void onItemClick(ProductModel product);
         }
 
-        private final List<ProductModel> items = new ArrayList<>();
-        private final OnItemClickListener listener;
+        interface OnFavClickListener {
+            void onFavClick(ProductModel product);
+        }
 
-        ProductSearchAdapter(OnItemClickListener listener) {
-            this.listener = listener;
+        private final List<ProductModel> items = new ArrayList<>();
+        private final OnItemClickListener itemListener;
+        private final OnFavClickListener favListener;
+        private List<String> favoriteNames = new ArrayList<>();
+
+        ProductSearchAdapter(OnItemClickListener itemListener,
+                             OnFavClickListener favListener) {
+            this.itemListener = itemListener;
+            this.favListener = favListener;
         }
 
         void submitList(List<ProductModel> products) {
@@ -335,6 +412,15 @@ public class SearchFoodFragment extends Fragment {
                 items.addAll(products);
             }
             notifyDataSetChanged();
+        }
+
+        void setFavoriteNames(List<String> names) {
+            this.favoriteNames = names != null ? names : new ArrayList<>();
+        }
+
+        private boolean isFavorite(String name) {
+            if (name == null) return false;
+            return favoriteNames.contains(name.toLowerCase());
         }
 
         @NonNull
@@ -372,7 +458,22 @@ public class SearchFoodFragment extends Fragment {
                 holder.binding.tvSource.setVisibility(View.GONE);
             }
 
-            holder.itemView.setOnClickListener(v -> listener.onItemClick(product));
+            // Cập nhật trạng thái nút yêu thích
+            boolean fav = isFavorite(product.getProductName());
+            android.content.res.ColorStateList tint = fav
+                    ? android.content.res.ColorStateList.valueOf(
+                            androidx.core.content.ContextCompat.getColor(
+                                    holder.itemView.getContext(), com.example.moblie_app.R.color.health_error))
+                    : android.content.res.ColorStateList.valueOf(
+                            androidx.core.content.ContextCompat.getColor(
+                                    holder.itemView.getContext(), com.example.moblie_app.R.color.health_text_hint));
+            holder.binding.btnFavorite.setIconResource(fav
+                    ? com.example.moblie_app.R.drawable.ic_heart_filled
+                    : com.example.moblie_app.R.drawable.ic_heart_outline);
+            holder.binding.btnFavorite.setIconTint(tint);
+
+            holder.itemView.setOnClickListener(v -> itemListener.onItemClick(product));
+            holder.binding.btnFavorite.setOnClickListener(v -> favListener.onFavClick(product));
         }
 
         @Override
