@@ -52,6 +52,8 @@ public class DashboardFragment extends Fragment {
                 Navigation.findNavController(v).navigate(R.id.action_dashboard_to_goals));
         binding.btnOpenActivity.setOnClickListener(v ->
                 Navigation.findNavController(v).navigate(R.id.action_dashboard_to_activity));
+        binding.btnOpenCalorieChart.setOnClickListener(v ->
+                Navigation.findNavController(v).navigate(R.id.action_dashboard_to_calorie_chart));
         binding.btnLogout.setOnClickListener(v -> logout());
     }
 
