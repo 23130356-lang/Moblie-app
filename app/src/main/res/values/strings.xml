@@ -20,4 +20,12 @@
     <string name="chart_goal">2000 kcal</string>
     <string name="chart_open">Biểu đồ calo</string>
     <string name="chart_desc">Xem biểu đồ calo tuần và tháng, so sánh với mục tiêu</string>
+
+    <!-- Favorite Foods -->
+    <string name="fav_title">Thực phẩm yêu thích</string>
+    <string name="fav_desc">Lưu thực phẩm hay dùng, gợi ý nhanh khi nhập</string>
+    <string name="fav_section_title">Yêu thích</string>
+    <string name="fav_added">Đã thêm vào yêu thích</string>
+    <string name="fav_removed">Đã xoá khỏi yêu thích</string>
+    <string name="fav_empty">Chưa có thực phẩm yêu thích nào</string>
 </resources>
