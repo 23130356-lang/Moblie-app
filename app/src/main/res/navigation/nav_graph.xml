@@ -50,6 +50,12 @@
         <action
             android:id="@+id/action_dashboard_to_food_diary"
             app:destination="@id/foodDiaryFragment" />
+        <action
+            android:id="@+id/action_dashboard_to_calorie_chart"
+            app:destination="@id/calorieChartFragment" />
+        <action
+            android:id="@+id/action_dashboard_to_search_food"
+            app:destination="@id/searchFoodFragment" />
     </fragment>
 
     <fragment
@@ -95,6 +101,11 @@
         android:id="@+id/activityFragment"
         android:name="com.example.moblie_app.ui.activity.ActivityFragment"
         android:label="Vận động &amp; Cân nặng" />
+
+    <fragment
+        android:id="@+id/calorieChartFragment"
+        android:name="com.example.moblie_app.ui.caloriechart.CalorieChartFragment"
+        android:label="@string/chart_title" />
 
     <fragment
         android:id="@+id/aiChatFragment"

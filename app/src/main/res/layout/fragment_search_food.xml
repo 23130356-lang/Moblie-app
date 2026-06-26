@@ -91,6 +91,18 @@
                 app:cornerRadius="20dp" />
         </LinearLayout>
 
+        <!-- Favorites section header (xuất hiện khi có yêu thích khớp) -->
+        <TextView
+            android:id="@+id/tv_section_favorites"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="18dp"
+            android:text="@string/fav_section_title"
+            android:textColor="@color/health_calorie"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:visibility="gone" />
+
         <!-- Results section -->
         <TextView
             android:id="@+id/tv_section_results"

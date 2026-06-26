@@ -25,14 +25,22 @@ public class FoodDiaryAdapter extends RecyclerView.Adapter<FoodDiaryAdapter.Food
         void onEdit(MealEntryModel meal);
     }
 
+    public interface OnFavListener {
+        void onFav(MealEntryModel meal);
+    }
+
     private final List<MealEntryModel> items = new ArrayList<>();
     private final OnDeleteListener deleteListener;
     private final OnEditListener editListener;
+    private final OnFavListener favListener;
+    private List<String> favoriteNames = new ArrayList<>();
 
     public FoodDiaryAdapter(OnDeleteListener deleteListener,
-                            OnEditListener editListener) {
+                            OnEditListener editListener,
+                            OnFavListener favListener) {
         this.deleteListener = deleteListener;
         this.editListener = editListener;
+        this.favListener = favListener;
     }
 
     public void submitList(List<MealEntryModel> meals) {
@@ -40,6 +48,11 @@ public class FoodDiaryAdapter extends RecyclerView.Adapter<FoodDiaryAdapter.Food
         if (meals != null) {
             items.addAll(meals);
         }
+        notifyDataSetChanged();
+    }
+
+    public void setFavoriteNames(List<String> names) {
+        this.favoriteNames = names != null ? names : new ArrayList<>();
         notifyDataSetChanged();
     }
 
@@ -53,7 +66,7 @@ public class FoodDiaryAdapter extends RecyclerView.Adapter<FoodDiaryAdapter.Food
 
     @Override
     public void onBindViewHolder(@NonNull FoodViewHolder holder, int position) {
-        holder.bind(items.get(position), deleteListener, editListener);
+        holder.bind(items.get(position), deleteListener, editListener, favListener, favoriteNames);
     }
 
     @Override
@@ -71,7 +84,9 @@ public class FoodDiaryAdapter extends RecyclerView.Adapter<FoodDiaryAdapter.Food
 
         void bind(MealEntryModel meal,
                   OnDeleteListener deleteListener,
-                  OnEditListener editListener) {
+                  OnEditListener editListener,
+                  OnFavListener favListener,
+                  List<String> favoriteNames) {
             binding.tvFoodName.setText(meal.getFoodName());
 
             String mealType = meal.getMealType();
@@ -92,6 +107,22 @@ public class FoodDiaryAdapter extends RecyclerView.Adapter<FoodDiaryAdapter.Food
                     "Khẩu phần: %.0f g", meal.getQuantity()));
             binding.btnEdit.setOnClickListener(v -> editListener.onEdit(meal));
             binding.btnDelete.setOnClickListener(v -> deleteListener.onDelete(meal));
+
+            // Trạng thái nút yêu thích
+            boolean fav = meal.getFoodName() != null
+                    && favoriteNames.contains(meal.getFoodName().toLowerCase());
+            android.content.res.ColorStateList tint = fav
+                    ? android.content.res.ColorStateList.valueOf(
+                            androidx.core.content.ContextCompat.getColor(
+                                    binding.getRoot().getContext(), R.color.health_error))
+                    : android.content.res.ColorStateList.valueOf(
+                            androidx.core.content.ContextCompat.getColor(
+                                    binding.getRoot().getContext(), R.color.health_text_hint));
+            binding.btnFavorite.setIconResource(fav
+                    ? R.drawable.ic_heart_filled
+                    : R.drawable.ic_heart_outline);
+            binding.btnFavorite.setIconTint(tint);
+            binding.btnFavorite.setOnClickListener(v -> favListener.onFav(meal));
         }
 
         private int getMealIcon(String type) {
