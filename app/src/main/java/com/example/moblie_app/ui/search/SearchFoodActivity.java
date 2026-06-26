@@ -153,10 +153,10 @@ public class SearchFoodActivity extends AppCompatActivity {
 
         NutrimentsModel nutriments = product.getNutriments();
         if (nutriments != null) {
-            binding.tvCalories.setText(formatValue(nutriments.getCalories()) + " kcal");
-            binding.tvProtein.setText(formatValue(nutriments.getProtein()) + " g");
-            binding.tvCarbs.setText(formatValue(nutriments.getCarbs()) + " g");
-            binding.tvFat.setText(formatValue(nutriments.getFat()) + " g");
+            binding.tvCalories.setText(nutriments.getCalories() != null ? formatValue(nutriments.getCalories()) + " kcal" : "--");
+            binding.tvProtein.setText(nutriments.getProtein() != null ? formatValue(nutriments.getProtein()) + " g" : "--");
+            binding.tvCarbs.setText(nutriments.getCarbs() != null ? formatValue(nutriments.getCarbs()) + " g" : "--");
+            binding.tvFat.setText(nutriments.getFat() != null ? formatValue(nutriments.getFat()) + " g" : "--");
         } else {
             binding.tvCalories.setText("--");
             binding.tvProtein.setText("--");
@@ -172,10 +172,10 @@ public class SearchFoodActivity extends AppCompatActivity {
         data.putExtra("image_url", selectedProduct.getImageUrl());
         NutrimentsModel n = selectedProduct.getNutriments();
         if (n != null) {
-            data.putExtra("calories", n.getCalories());
-            data.putExtra("protein", n.getProtein());
-            data.putExtra("carbs", n.getCarbs());
-            data.putExtra("fat", n.getFat());
+            data.putExtra("calories", n.getCalories() != null ? n.getCalories() : 0.0);
+            data.putExtra("protein", n.getProtein() != null ? n.getProtein() : 0.0);
+            data.putExtra("carbs", n.getCarbs() != null ? n.getCarbs() : 0.0);
+            data.putExtra("fat", n.getFat() != null ? n.getFat() : 0.0);
         }
         setResult(RESULT_OK, data);
         finish();
@@ -237,10 +237,10 @@ public class SearchFoodActivity extends AppCompatActivity {
             if (n != null) {
                 holder.text2.setText(String.format(Locale.getDefault(),
                         "Calo: %s kcal · P: %s g · C: %s g · F: %s g%s",
-                        formatValueStatic(n.getCalories()),
-                        formatValueStatic(n.getProtein()),
-                        formatValueStatic(n.getCarbs()),
-                        formatValueStatic(n.getFat()),
+                        n.getCalories() != null ? formatValueStatic(n.getCalories()) : "--",
+                        n.getProtein() != null ? formatValueStatic(n.getProtein()) : "--",
+                        n.getCarbs() != null ? formatValueStatic(n.getCarbs()) : "--",
+                        n.getFat() != null ? formatValueStatic(n.getFat()) : "--",
                         sourceText));
             } else {
                 holder.text2.setText("Không có thông tin dinh dưỡng" + sourceText);

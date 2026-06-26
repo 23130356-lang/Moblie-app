@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -25,6 +26,7 @@ import com.example.moblie_app.model.MealEntryModel;
 import com.example.moblie_app.model.MealSummary;
 import com.example.moblie_app.model.MacroNutrients;
 import com.example.moblie_app.utils.DateUtils;
+import com.example.moblie_app.utils.ServingUnit;
 import com.example.moblie_app.viewmodel.FavoriteFoodViewModel;
 import com.example.moblie_app.viewmodel.NutritionViewModel;
 
@@ -86,6 +88,11 @@ public class FoodDiaryFragment extends Fragment {
 
         favViewModel.loadFavorites();
         viewModel.loadEntries(currentDate);
+
+        binding.btnAddBreakfast.setOnClickListener(v -> navigateToSearch("breakfast"));
+        binding.btnAddLunch.setOnClickListener(v -> navigateToSearch("lunch"));
+        binding.btnAddDinner.setOnClickListener(v -> navigateToSearch("dinner"));
+        binding.btnAddSnack.setOnClickListener(v -> navigateToSearch("snack"));
     }
 
     @Override
@@ -155,33 +162,77 @@ public class FoodDiaryFragment extends Fragment {
     private void showEditQuantityDialog(MealEntryModel meal) {
         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
         builder.setTitle("Sửa khẩu phần");
-        builder.setMessage("Nhập số gram mới cho " + meal.getFoodName());
+
+        String unitLabel = meal.getUnitLabel();
+        double currentUnitQty = meal.getUnitQuantity();
+        boolean hasUnit = unitLabel != null && !unitLabel.isEmpty() && !unitLabel.equals("g");
+
+        String currentDisplay = ServingUnit.gramsToDisplay(
+                meal.getQuantity(), unitLabel, currentUnitQty);
+        builder.setMessage("Khẩu phần hiện tại: " + currentDisplay + "\nNhập số lượng mới:");
+
+        LinearLayout row = new LinearLayout(requireContext());
+        row.setOrientation(LinearLayout.HORIZONTAL);
+        row.setGravity(android.view.Gravity.CENTER_VERTICAL);
+        int paddingPx = (int) (getResources().getDisplayMetrics().density * 24);
+        row.setPadding(paddingPx, 0, paddingPx, 0);
 
         EditText input = new EditText(requireContext());
         input.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
-        input.setText(String.valueOf((int) meal.getQuantity()));
+        input.setText(hasUnit ? String.valueOf((int) currentUnitQty)
+                : String.valueOf((int) meal.getQuantity()));
         input.setSelectAllOnFocus(true);
+        LinearLayout.LayoutParams qtyParams = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f);
+        input.setLayoutParams(qtyParams);
+        row.addView(input);
 
-        int paddingPx = (int) (getResources().getDisplayMetrics().density * 24);
-        LinearLayout layout = new LinearLayout(requireContext());
-        layout.setPadding(paddingPx, 0, paddingPx, 0);
-        layout.addView(input);
-        builder.setView(layout);
+        if (hasUnit) {
+            TextView unitText = new TextView(requireContext());
+            unitText.setText(unitLabel);
+            unitText.setTextSize(16);
+            unitText.setTextColor(androidx.core.content.ContextCompat.getColor(
+                    requireContext(), R.color.health_text_primary));
+            unitText.setPadding((int) (8 * getResources().getDisplayMetrics().density), 0, 0, 0);
+            row.addView(unitText);
+        } else {
+            TextView unitText = new TextView(requireContext());
+            unitText.setText("g");
+            unitText.setTextSize(16);
+            unitText.setTextColor(androidx.core.content.ContextCompat.getColor(
+                    requireContext(), R.color.health_text_primary));
+            unitText.setPadding((int) (8 * getResources().getDisplayMetrics().density), 0, 0, 0);
+            row.addView(unitText);
+        }
 
+        builder.setView(row);
+
+        String finalUnitLabel = hasUnit ? unitLabel : "g";
         builder.setPositiveButton("Lưu", (dialog, which) -> {
-            String qtyStr = input.getText().toString().trim();
+            String qtyStr = input.getText().toString().trim().replace(",", ".");
             if (qtyStr.isEmpty()) return;
 
             try {
-                double newQuantity = Double.parseDouble(qtyStr);
-                if (newQuantity <= 0) {
-                    binding.tvError.setText("Khẩu phần phải lớn hơn 0 gram.");
+                double newUnitQty = Double.parseDouble(qtyStr);
+                if (newUnitQty <= 0) {
+                    binding.tvError.setText("Khẩu phần phải lớn hơn 0.");
                     binding.tvError.setVisibility(View.VISIBLE);
                     return;
                 }
-                updateMealQuantity(meal, newQuantity);
+                double gramsPerUnit = 1;
+                if (hasUnit) {
+                    for (ServingUnit u : ServingUnit.getDefaults()) {
+                        if (u.getLabel().equals(finalUnitLabel)) {
+                            gramsPerUnit = u.getGrams();
+                            break;
+                        }
+                    }
+                }
+                double newGrams = newUnitQty * gramsPerUnit;
+                meal.setUnitQuantity(newUnitQty);
+                meal.setUnitLabel(finalUnitLabel);
+                updateMealQuantity(meal, newGrams);
             } catch (NumberFormatException e) {
-                binding.tvError.setText("Số gram không hợp lệ.");
+                binding.tvError.setText("Số lượng không hợp lệ.");
                 binding.tvError.setVisibility(View.VISIBLE);
             }
         });
@@ -244,6 +295,13 @@ public class FoodDiaryFragment extends Fragment {
             favViewModel.addFavorite(name, meal.getCalories(), meal.getProtein(),
                     meal.getCarbs(), meal.getFat(), "Nhật ký ăn uống");
         }
+    }
+
+    private void navigateToSearch(String mealType) {
+        Bundle args = new Bundle();
+        args.putString("mealType", mealType);
+        Navigation.findNavController(requireView())
+                .navigate(R.id.action_foodDiary_to_searchFood, args);
     }
 
     @Override

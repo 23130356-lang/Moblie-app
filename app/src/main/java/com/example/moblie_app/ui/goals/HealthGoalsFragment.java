@@ -159,8 +159,10 @@ public class HealthGoalsFragment extends Fragment {
         etWeight.addTextChangedListener(new SimpleTextWatcher() {
             @Override public void afterTextChanged(Editable s) {
                 if (isUpdating) return;
+                String raw = s.toString().replace(",", ".").trim();
+                if (raw.isEmpty()) return;
                 try {
-                    float v = Float.parseFloat(s.toString());
+                    float v = Float.parseFloat(raw);
                     float snapped = snapWeight(v);
                     if (snapped >= 30 && snapped <= 150) {
                         isUpdating = true;
@@ -176,8 +178,10 @@ public class HealthGoalsFragment extends Fragment {
         etCalories.addTextChangedListener(new SimpleTextWatcher() {
             @Override public void afterTextChanged(Editable s) {
                 if (isUpdating) return;
+                String raw = s.toString().replace(",", ".").trim();
+                if (raw.isEmpty()) return;
                 try {
-                    int cal = Integer.parseInt(s.toString());
+                    int cal = Integer.parseInt(raw);
                     int snapped = snapCalories(cal);
                     if (snapped >= 800 && snapped <= 4000) {
                         isUpdating = true;
@@ -194,8 +198,10 @@ public class HealthGoalsFragment extends Fragment {
         etSteps.addTextChangedListener(new SimpleTextWatcher() {
             @Override public void afterTextChanged(Editable s) {
                 if (isUpdating) return;
+                String raw = s.toString().replace(",", ".").trim();
+                if (raw.isEmpty()) return;
                 try {
-                    int steps = Integer.parseInt(s.toString());
+                    int steps = Integer.parseInt(raw);
                     int snapped = snapSteps(steps);
                     if (snapped >= 1000 && snapped <= 30000) {
                         isUpdating = true;

@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?attr/colorSurface"
+    android:background="@color/health_bg"
     android:fillViewport="true">
 
     <LinearLayout
@@ -17,7 +17,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Nhật ký ăn uống"
-            android:textColor="?attr/colorOnSurface"
+            android:textColor="@color/health_text_primary"
             android:textSize="26sp"
             android:textStyle="bold" />
 
@@ -27,7 +27,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
             android:text="Theo dõi calo và dinh dưỡng hằng ngày."
-            android:textColor="?attr/colorOnSurfaceVariant"
+            android:textColor="@color/health_text_secondary"
             android:textSize="14sp" />
 
         <TextView
@@ -35,7 +35,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
-            android:textColor="?attr/colorError"
+            android:textColor="@color/health_error"
             android:textSize="13sp"
             android:visibility="gone" />
 
@@ -53,8 +53,9 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="18dp"
             app:cardCornerRadius="16dp"
-            app:cardElevation="1dp"
-            app:strokeWidth="0dp">
+            app:cardElevation="0dp"
+            app:strokeWidth="0dp"
+            app:cardBackgroundColor="@color/white">
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -65,7 +66,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Ngày:"
-                    android:textColor="?attr/colorOnSurface"
+                    android:textColor="@color/health_text_primary"
                     android:textSize="16sp"
                     android:textStyle="bold" />
                 <TextView
@@ -74,7 +75,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:layout_marginStart="10dp"
-                    android:textColor="?attr/colorPrimary"
+                    android:textColor="@color/health_mint"
                     android:textSize="16sp"
                     android:textStyle="bold" />
                 <com.google.android.material.button.MaterialButton
@@ -95,8 +96,9 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             app:cardCornerRadius="20dp"
-            app:cardElevation="3dp"
-            app:strokeWidth="0dp">
+            app:cardElevation="0dp"
+            app:strokeWidth="0dp"
+            app:cardBackgroundColor="@color/white">
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -149,18 +151,16 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Tổng dinh dưỡng"
-                        android:textColor="?attr/colorOnSurface"
+                        android:textColor="@color/health_text_primary"
                         android:textSize="15sp"
                         android:textStyle="bold" />
 
-                    <!-- Protein -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="12dp"
                         android:gravity="center_vertical"
                         android:orientation="horizontal">
-
                         <TextView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
@@ -168,7 +168,6 @@
                             android:text="Protein"
                             android:textColor="@color/health_text_secondary"
                             android:textSize="13sp" />
-
                         <TextView
                             android:id="@+id/tv_daily_protein"
                             android:layout_width="wrap_content"
@@ -182,14 +181,12 @@
                             android:textStyle="bold" />
                     </LinearLayout>
 
-                    <!-- Carbs -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
                         android:gravity="center_vertical"
                         android:orientation="horizontal">
-
                         <TextView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
@@ -197,7 +194,6 @@
                             android:text="Carbs"
                             android:textColor="@color/health_text_secondary"
                             android:textSize="13sp" />
-
                         <TextView
                             android:id="@+id/tv_daily_carbs"
                             android:layout_width="wrap_content"
@@ -211,14 +207,12 @@
                             android:textStyle="bold" />
                     </LinearLayout>
 
-                    <!-- Fat -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
                         android:gravity="center_vertical"
                         android:orientation="horizontal">
-
                         <TextView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
@@ -226,7 +220,6 @@
                             android:text="Fat"
                             android:textColor="@color/health_text_secondary"
                             android:textSize="13sp" />
-
                         <TextView
                             android:id="@+id/tv_daily_fat"
                             android:layout_width="wrap_content"
@@ -253,52 +246,53 @@
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- Meal Summary Cards -->
+        <!-- Meal Cards - Vertical List -->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:text="Bữa ăn"
-            android:textColor="?attr/colorOnSurface"
+            android:textColor="@color/health_text_primary"
             android:textSize="18sp"
             android:textStyle="bold" />
 
-        <LinearLayout
+        <!-- Breakfast card -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/card_breakfast"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
-            android:orientation="horizontal"
-            android:weightSum="2">
-
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/card_breakfast"
-                android:layout_width="0dp"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="0dp"
+            app:strokeWidth="0dp"
+            app:cardBackgroundColor="@color/white">
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                app:cardCornerRadius="14dp"
-                app:cardElevation="1dp"
-                app:strokeWidth="0dp"
-                android:clickable="true"
-                android:focusable="true"
-                android:foreground="?attr/selectableItemBackground">
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="16dp">
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:padding="8dp"
+                    android:background="@color/health_mint_light"
+                    android:src="@drawable/ic_breakfast"
+                    android:contentDescription="Bữa sáng"
+                    app:tint="@color/health_mint" />
                 <LinearLayout
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:orientation="vertical"
-                    android:padding="14dp">
-                    <ImageView
-                        android:layout_width="32dp"
-                        android:layout_height="32dp"
-                        android:src="@drawable/ic_breakfast"
-                        android:contentDescription="Bữa sáng" />
+                    android:layout_weight="1"
+                    android:layout_marginStart="12dp"
+                    android:orientation="vertical">
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="6dp"
                         android:text="Bữa sáng"
-                        android:textColor="?attr/colorOnSurfaceVariant"
-                        android:textSize="12sp" />
+                        android:textColor="@color/health_text_primary"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
                     <TextView
                         android:id="@+id/tv_breakfast_calories"
                         android:layout_width="wrap_content"
@@ -306,48 +300,60 @@
                         android:layout_marginTop="2dp"
                         android:text="0 kcal"
                         android:textColor="@color/health_calorie"
-                        android:textSize="15sp"
+                        android:textSize="14sp"
                         android:textStyle="bold" />
-                    <TextView
-                        android:id="@+id/tv_breakfast_count"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="0 món"
-                        android:textColor="@color/health_text_hint"
-                        android:textSize="11sp" />
                 </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_add_breakfast"
+                    style="@style/Widget.Material3.Button.IconButton"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:minWidth="0dp"
+                    android:contentDescription="Thêm bữa sáng"
+                    app:icon="@android:drawable/ic_input_add"
+                    app:iconSize="20dp"
+                    app:iconTint="@color/health_mint"
+                    app:backgroundTint="@color/health_mint_surface" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
 
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/card_lunch"
-                android:layout_width="0dp"
+        <!-- Lunch card -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/card_lunch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="0dp"
+            app:strokeWidth="0dp"
+            app:cardBackgroundColor="@color/white">
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="12dp"
-                android:layout_weight="1"
-                app:cardCornerRadius="14dp"
-                app:cardElevation="1dp"
-                app:strokeWidth="0dp"
-                android:clickable="true"
-                android:focusable="true"
-                android:foreground="?attr/selectableItemBackground">
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="16dp">
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:padding="8dp"
+                    android:background="@color/health_mint_light"
+                    android:src="@drawable/ic_lunch"
+                    android:contentDescription="Bữa trưa"
+                    app:tint="@color/health_mint" />
                 <LinearLayout
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:orientation="vertical"
-                    android:padding="14dp">
-                    <ImageView
-                        android:layout_width="32dp"
-                        android:layout_height="32dp"
-                        android:src="@drawable/ic_lunch"
-                        android:contentDescription="Bữa trưa" />
+                    android:layout_weight="1"
+                    android:layout_marginStart="12dp"
+                    android:orientation="vertical">
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="6dp"
                         android:text="Bữa trưa"
-                        android:textColor="?attr/colorOnSurfaceVariant"
-                        android:textSize="12sp" />
+                        android:textColor="@color/health_text_primary"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
                     <TextView
                         android:id="@+id/tv_lunch_calories"
                         android:layout_width="wrap_content"
@@ -355,55 +361,60 @@
                         android:layout_marginTop="2dp"
                         android:text="0 kcal"
                         android:textColor="@color/health_calorie"
-                        android:textSize="15sp"
+                        android:textSize="14sp"
                         android:textStyle="bold" />
-                    <TextView
-                        android:id="@+id/tv_lunch_count"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="0 món"
-                        android:textColor="@color/health_text_hint"
-                        android:textSize="11sp" />
                 </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
-        </LinearLayout>
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_add_lunch"
+                    style="@style/Widget.Material3.Button.IconButton"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:minWidth="0dp"
+                    android:contentDescription="Thêm bữa trưa"
+                    app:icon="@android:drawable/ic_input_add"
+                    app:iconSize="20dp"
+                    app:iconTint="@color/health_mint"
+                    app:backgroundTint="@color/health_mint_surface" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
 
-        <LinearLayout
+        <!-- Dinner card -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/card_dinner"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:orientation="horizontal"
-            android:weightSum="2">
-
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/card_dinner"
-                android:layout_width="0dp"
+            android:layout_marginTop="10dp"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="0dp"
+            app:strokeWidth="0dp"
+            app:cardBackgroundColor="@color/white">
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                app:cardCornerRadius="14dp"
-                app:cardElevation="1dp"
-                app:strokeWidth="0dp"
-                android:clickable="true"
-                android:focusable="true"
-                android:foreground="?attr/selectableItemBackground">
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="16dp">
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:padding="8dp"
+                    android:background="@color/health_mint_light"
+                    android:src="@drawable/ic_dinner"
+                    android:contentDescription="Bữa tối"
+                    app:tint="@color/health_mint" />
                 <LinearLayout
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:orientation="vertical"
-                    android:padding="14dp">
-                    <ImageView
-                        android:layout_width="32dp"
-                        android:layout_height="32dp"
-                        android:src="@drawable/ic_dinner"
-                        android:contentDescription="Bữa tối" />
+                    android:layout_weight="1"
+                    android:layout_marginStart="12dp"
+                    android:orientation="vertical">
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="6dp"
                         android:text="Bữa tối"
-                        android:textColor="?attr/colorOnSurfaceVariant"
-                        android:textSize="12sp" />
+                        android:textColor="@color/health_text_primary"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
                     <TextView
                         android:id="@+id/tv_dinner_calories"
                         android:layout_width="wrap_content"
@@ -411,48 +422,60 @@
                         android:layout_marginTop="2dp"
                         android:text="0 kcal"
                         android:textColor="@color/health_calorie"
-                        android:textSize="15sp"
+                        android:textSize="14sp"
                         android:textStyle="bold" />
-                    <TextView
-                        android:id="@+id/tv_dinner_count"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="0 món"
-                        android:textColor="@color/health_text_hint"
-                        android:textSize="11sp" />
                 </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_add_dinner"
+                    style="@style/Widget.Material3.Button.IconButton"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:minWidth="0dp"
+                    android:contentDescription="Thêm bữa tối"
+                    app:icon="@android:drawable/ic_input_add"
+                    app:iconSize="20dp"
+                    app:iconTint="@color/health_mint"
+                    app:backgroundTint="@color/health_mint_surface" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
 
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/card_snack"
-                android:layout_width="0dp"
+        <!-- Snack card -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/card_snack"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="0dp"
+            app:strokeWidth="0dp"
+            app:cardBackgroundColor="@color/white">
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="12dp"
-                android:layout_weight="1"
-                app:cardCornerRadius="14dp"
-                app:cardElevation="1dp"
-                app:strokeWidth="0dp"
-                android:clickable="true"
-                android:focusable="true"
-                android:foreground="?attr/selectableItemBackground">
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="16dp">
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:padding="8dp"
+                    android:background="@color/health_mint_light"
+                    android:src="@drawable/ic_snack"
+                    android:contentDescription="Bữa phụ"
+                    app:tint="@color/health_mint" />
                 <LinearLayout
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:orientation="vertical"
-                    android:padding="14dp">
-                    <ImageView
-                        android:layout_width="32dp"
-                        android:layout_height="32dp"
-                        android:src="@drawable/ic_snack"
-                        android:contentDescription="Bữa phụ" />
+                    android:layout_weight="1"
+                    android:layout_marginStart="12dp"
+                    android:orientation="vertical">
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="6dp"
                         android:text="Bữa phụ"
-                        android:textColor="?attr/colorOnSurfaceVariant"
-                        android:textSize="12sp" />
+                        android:textColor="@color/health_text_primary"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
                     <TextView
                         android:id="@+id/tv_snack_calories"
                         android:layout_width="wrap_content"
@@ -460,29 +483,22 @@
                         android:layout_marginTop="2dp"
                         android:text="0 kcal"
                         android:textColor="@color/health_calorie"
-                        android:textSize="15sp"
+                        android:textSize="14sp"
                         android:textStyle="bold" />
-                    <TextView
-                        android:id="@+id/tv_snack_count"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="0 món"
-                        android:textColor="@color/health_text_hint"
-                        android:textSize="11sp" />
                 </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
-        </LinearLayout>
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn_add_food"
-            android:layout_width="match_parent"
-            android:layout_height="52dp"
-            android:layout_marginTop="16dp"
-            android:text="+ Thêm món ăn"
-            android:textSize="15sp"
-            app:cornerRadius="26dp"
-            app:icon="@android:drawable/ic_input_add"
-            app:iconGravity="textStart" />
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_add_snack"
+                    style="@style/Widget.Material3.Button.IconButton"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:minWidth="0dp"
+                    android:contentDescription="Thêm bữa phụ"
+                    app:icon="@android:drawable/ic_input_add"
+                    app:iconSize="20dp"
+                    app:iconTint="@color/health_mint"
+                    app:backgroundTint="@color/health_mint_surface" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
 
         <!-- Food List Section -->
         <TextView
@@ -490,7 +506,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:text="Danh sách món ăn"
-            android:textColor="?attr/colorOnSurface"
+            android:textColor="@color/health_text_primary"
             android:textSize="18sp"
             android:textStyle="bold" />
 
@@ -507,7 +523,8 @@
                 android:layout_width="64dp"
                 android:layout_height="64dp"
                 android:padding="12dp"
-                android:background="@color/health_green_light"
+                android:background="@color/health_mint_light"
+                app:tint="@color/health_mint"
                 android:src="@drawable/ic_breakfast"
                 android:contentDescription="Empty" />
             <TextView
@@ -516,25 +533,16 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:text="Chưa có món ăn nào"
-                android:textColor="?attr/colorOnSurface"
+                android:textColor="@color/health_text_primary"
                 android:textSize="16sp"
                 android:textStyle="bold" />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
-                android:text="Hãy thêm món ăn đầu tiên của bạn"
-                android:textColor="?attr/colorOnSurfaceVariant"
+                android:text="Hãy thêm món ăn bằng cách nhấn nút + bên cạnh bữa ăn"
+                android:textColor="@color/health_text_secondary"
                 android:textSize="13sp" />
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_empty_add"
-                style="@style/HealthButton.Outlined"
-                android:layout_width="wrap_content"
-                android:layout_height="44dp"
-                android:layout_marginTop="16dp"
-                android:text="+ Thêm món ăn"
-                android:textSize="14sp"
-                app:cornerRadius="22dp" />
         </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView

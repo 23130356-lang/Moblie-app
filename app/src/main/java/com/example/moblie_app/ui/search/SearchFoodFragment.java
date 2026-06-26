@@ -7,10 +7,12 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -18,11 +20,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.moblie_app.databinding.FragmentSearchFoodBinding;
+import com.example.moblie_app.databinding.ItemFavoriteBinding;
 import com.example.moblie_app.databinding.ItemSearchProductBinding;
 import com.example.moblie_app.model.FavoriteFoodModel;
 import com.example.moblie_app.model.MealEntryModel;
@@ -32,6 +34,7 @@ import com.example.moblie_app.network.of.ProductModel;
 import com.example.moblie_app.repository.FoodRepository;
 import com.example.moblie_app.utils.Constants;
 import com.example.moblie_app.utils.DateUtils;
+import com.example.moblie_app.utils.ServingUnit;
 import com.example.moblie_app.viewmodel.FavoriteFoodViewModel;
 import com.example.moblie_app.viewmodel.NutritionViewModel;
 import com.google.firebase.auth.FirebaseAuth;
@@ -48,8 +51,10 @@ public class SearchFoodFragment extends Fragment {
     private FragmentSearchFoodBinding binding;
     private FoodRepository foodRepository;
     private FavoriteFoodViewModel favViewModel;
-    private ProductSearchAdapter adapter;
+    private ProductSearchAdapter productAdapter;
+    private FavoriteAdapter favoriteAdapter;
     private ProductModel selectedProduct;
+    private String preselectedMealType;
 
     private List<FavoriteFoodModel> favoriteList = new ArrayList<>();
 
@@ -59,6 +64,7 @@ public class SearchFoodFragment extends Fragment {
                 if (result.getContents() != null) {
                     String barcode = result.getContents();
                     binding.etSearch.setText(barcode);
+                    selectAllFoodsTab();
                     lookupBarcode(barcode);
                 } else {
                     showError("Đã huỷ quét mã vạch.");
@@ -79,31 +85,31 @@ public class SearchFoodFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        if (getArguments() != null) {
+            preselectedMealType = getArguments().getString("mealType", "snack");
+        } else {
+            preselectedMealType = "snack";
+        }
+
         foodRepository = new FoodRepository();
         favViewModel = new ViewModelProvider(
                 this,
                 new FavoriteFoodViewModel.Factory(requireContext()))
                 .get(FavoriteFoodViewModel.class);
 
-        adapter = new ProductSearchAdapter(new ProductSearchAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(ProductModel product) {
-                selectedProduct = product;
-                showNutrition(product);
-                showMealEntryDialog(product);
-            }
-        }, new ProductSearchAdapter.OnFavClickListener() {
-            @Override
-            public void onFavClick(ProductModel product) {
-                favViewModel.toggleFavorite(product);
-            }
-        });
+        setupProductAdapter();
+        setupFavoriteAdapter();
+
         binding.rvResults.setLayoutManager(new LinearLayoutManager(requireContext()));
-        binding.rvResults.setAdapter(adapter);
+        binding.rvResults.setAdapter(productAdapter);
+        binding.rvFavorites.setLayoutManager(new LinearLayoutManager(requireContext()));
+        binding.rvFavorites.setAdapter(favoriteAdapter);
 
         binding.btnAddToDiary.setOnClickListener(v -> {
             if (selectedProduct != null) {
-                showMealEntryDialog(selectedProduct);
+                showMealEntryDialog(selectedProduct.getProductName(),
+                        selectedProduct.getServingSize(),
+                        selectedProduct.getNutriments());
             }
         });
 
@@ -112,19 +118,44 @@ public class SearchFoodFragment extends Fragment {
         binding.etSearch.setOnEditorActionListener((v, actionId, event) -> {
             if (actionId == android.view.inputmethod.EditorInfo.IME_ACTION_SEARCH
                     || (event != null && event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) {
-                performSearch();
+                int currentTab = binding.tabLayout.getSelectedTabPosition();
+                if (currentTab == 0) {
+                    filterFavoritesLocally();
+                } else {
+                    performSearch();
+                }
                 return true;
             }
             return false;
         });
 
-        // Theo dõi danh sách yêu thích
+        binding.tabLayout.addOnTabSelectedListener(new com.google.android.material.tabs.TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(com.google.android.material.tabs.TabLayout.Tab tab) {
+                if (tab.getPosition() == 0) {
+                    showFavoritesTab();
+                } else {
+                    showAllFoodsTab();
+                }
+            }
+            @Override
+            public void onTabUnselected(com.google.android.material.tabs.TabLayout.Tab tab) {}
+            @Override
+            public void onTabReselected(com.google.android.material.tabs.TabLayout.Tab tab) {}
+        });
+
         favViewModel.getFavorites().observe(getViewLifecycleOwner(), favorites -> {
             favoriteList = favorites != null ? favorites : new ArrayList<>();
-            adapter.setFavoriteNames(toNameSet(favoriteList));
-            // Nếu đang hiển thị kết quả, cập nhật lại trạng thái tim
-            adapter.notifyDataSetChanged();
-            updateFavSection();
+            favoriteAdapter.submitList(favoriteList);
+            boolean empty = favoriteList.isEmpty();
+            binding.tvEmptyFavorites.setVisibility(empty ? View.VISIBLE : View.GONE);
+            binding.rvFavorites.setVisibility(empty ? View.GONE : View.VISIBLE);
+
+            List<String> names = new ArrayList<>();
+            for (FavoriteFoodModel m : favoriteList) {
+                if (m.getName() != null) names.add(m.getName().toLowerCase());
+            }
+            productAdapter.setFavoriteNames(names);
         });
 
         favViewModel.getActionDone().observe(getViewLifecycleOwner(), done -> {
@@ -136,12 +167,61 @@ public class SearchFoodFragment extends Fragment {
         favViewModel.loadFavorites();
     }
 
-    private List<String> toNameSet(List<FavoriteFoodModel> list) {
-        List<String> names = new ArrayList<>();
-        for (FavoriteFoodModel m : list) {
-            if (m.getName() != null) names.add(m.getName().toLowerCase());
+    private void setupProductAdapter() {
+        productAdapter = new ProductSearchAdapter(
+                product -> {
+                    selectedProduct = product;
+                    showNutrition(product);
+                },
+                product -> favViewModel.toggleFavorite(product)
+        );
+    }
+
+    private void setupFavoriteAdapter() {
+        favoriteAdapter = new FavoriteAdapter(
+                fav -> {
+                    NutrimentsModel n = new NutrimentsModel(
+                            fav.getCalories(), fav.getProtein(), fav.getCarbs(), fav.getFat());
+                    showMealEntryDialog(fav.getName(), n);
+                },
+                fav -> favViewModel.removeFavorite(fav.getName())
+        );
+    }
+
+    private void filterFavoritesLocally() {
+        String query = binding.etSearch.getText().toString().trim().toLowerCase();
+        List<FavoriteFoodModel> filtered = new ArrayList<>();
+        for (FavoriteFoodModel fav : favoriteList) {
+            if (query.isEmpty() || (fav.getName() != null && fav.getName().toLowerCase().contains(query))) {
+                filtered.add(fav);
+            }
         }
-        return names;
+        favoriteAdapter.submitList(filtered);
+        boolean empty = filtered.isEmpty();
+        binding.tvEmptyFavorites.setVisibility(empty ? View.VISIBLE : View.GONE);
+        binding.rvFavorites.setVisibility(empty ? View.GONE : View.VISIBLE);
+        if (empty) {
+            if (query.isEmpty()) {
+                binding.tvEmptyFavorites.setText("Chưa có món ăn yêu thích nào.\nHãy thêm ở tab Tất cả!");
+            } else {
+                binding.tvEmptyFavorites.setText("Không tìm thấy món yêu thích nào.");
+            }
+        }
+    }
+
+    private void selectAllFoodsTab() {
+        com.google.android.material.tabs.TabLayout.Tab tab = binding.tabLayout.getTabAt(1);
+        if (tab != null) tab.select();
+    }
+
+    private void showFavoritesTab() {
+        binding.layoutFavorites.setVisibility(View.VISIBLE);
+        binding.layoutAllFoods.setVisibility(View.GONE);
+    }
+
+    private void showAllFoodsTab() {
+        binding.layoutFavorites.setVisibility(View.GONE);
+        binding.layoutAllFoods.setVisibility(View.VISIBLE);
     }
 
     private void performSearch() {
@@ -158,15 +238,12 @@ public class SearchFoodFragment extends Fragment {
         binding.cardNutrition.setVisibility(View.GONE);
         binding.progressBar.setVisibility(View.VISIBLE);
 
-        // Lọc yêu thích trùng với query
-        updateFavSection();
-
         foodRepository.searchByName(query, new FoodRepository.SearchCallback() {
             @Override
             public void onSuccess(List<ProductModel> products, String source) {
                 if (!isAdded()) return;
                 binding.progressBar.setVisibility(View.GONE);
-                adapter.submitList(products);
+                productAdapter.submitList(products);
                 binding.rvResults.setVisibility(View.VISIBLE);
                 binding.tvSectionResults.setVisibility(View.VISIBLE);
                 binding.tvSectionResults.setText("Kết quả từ " + source);
@@ -180,27 +257,6 @@ public class SearchFoodFragment extends Fragment {
                 binding.tvEmpty.setVisibility(View.VISIBLE);
             }
         });
-    }
-
-    private void updateFavSection() {
-        String query = binding.etSearch.getText().toString().trim().toLowerCase();
-        boolean hasFavs = false;
-        if (!query.isEmpty()) {
-            for (FavoriteFoodModel m : favoriteList) {
-                if (m.getName() != null && m.getName().toLowerCase().contains(query)) {
-                    hasFavs = true;
-                    break;
-                }
-            }
-        } else {
-            hasFavs = !favoriteList.isEmpty();
-        }
-
-        if (hasFavs) {
-            binding.tvSectionFavorites.setVisibility(View.VISIBLE);
-        } else {
-            binding.tvSectionFavorites.setVisibility(View.GONE);
-        }
     }
 
     private void startBarcodeScan() {
@@ -251,10 +307,10 @@ public class SearchFoodFragment extends Fragment {
 
         NutrimentsModel nutriments = product.getNutriments();
         if (nutriments != null) {
-            binding.tvCalories.setText(formatValue(nutriments.getCalories()) + " kcal");
-            binding.tvProtein.setText(formatValue(nutriments.getProtein()) + " g");
-            binding.tvCarbs.setText(formatValue(nutriments.getCarbs()) + " g");
-            binding.tvFat.setText(formatValue(nutriments.getFat()) + " g");
+            binding.tvCalories.setText(nutriments.getCalories() != null ? formatValue(nutriments.getCalories()) + " kcal" : "--");
+            binding.tvProtein.setText(nutriments.getProtein() != null ? formatValue(nutriments.getProtein()) + " g" : "--");
+            binding.tvCarbs.setText(nutriments.getCarbs() != null ? formatValue(nutriments.getCarbs()) + " g" : "--");
+            binding.tvFat.setText(nutriments.getFat() != null ? formatValue(nutriments.getFat()) + " g" : "--");
         } else {
             binding.tvCalories.setText("--");
             binding.tvProtein.setText("--");
@@ -263,32 +319,71 @@ public class SearchFoodFragment extends Fragment {
         }
     }
 
-    private void showMealEntryDialog(ProductModel product) {
+    private void showMealEntryDialog(String foodName, NutrimentsModel nutriments) {
+        showMealEntryDialog(foodName, null, nutriments);
+    }
+
+    private void showMealEntryDialog(String foodName, String servingSize, NutrimentsModel nutriments) {
         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
-        builder.setTitle(product.getProductName() != null
-                ? product.getProductName() : "Thêm món ăn");
+        builder.setTitle(foodName != null ? foodName : "Thêm món ăn");
+
+        int density = (int) (getResources().getDisplayMetrics().density);
 
         LinearLayout layout = new LinearLayout(requireContext());
         layout.setOrientation(LinearLayout.VERTICAL);
-        int paddingPx = (int) (getResources().getDisplayMetrics().density * 24);
+        int paddingPx = density * 24;
         layout.setPadding(paddingPx, paddingPx / 2, paddingPx, 0);
 
+        List<ServingUnit> units;
+        if (servingSize != null) {
+            units = ServingUnit.parseOffServingSize(servingSize);
+        } else {
+            units = ServingUnit.getDefaults();
+        }
+
+        LinearLayout row = new LinearLayout(requireContext());
+        row.setOrientation(LinearLayout.HORIZONTAL);
+        row.setGravity(android.view.Gravity.CENTER_VERTICAL);
+
         EditText quantityInput = new EditText(requireContext());
-        quantityInput.setHint("Nhập số grams (mặc định 100)");
+        quantityInput.setHint("Số lượng");
         quantityInput.setInputType(InputType.TYPE_CLASS_NUMBER
                 | InputType.TYPE_NUMBER_FLAG_DECIMAL);
-        quantityInput.setText("100");
-        layout.addView(quantityInput);
+        quantityInput.setText("1");
+        LinearLayout.LayoutParams qtyParams = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f);
+        quantityInput.setLayoutParams(qtyParams);
+        row.addView(quantityInput);
+
+        Spinner unitSpinner = new Spinner(requireContext());
+        String[] unitLabels = ServingUnit.displayArray(units);
+        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(
+                requireContext(), android.R.layout.simple_spinner_dropdown_item, unitLabels);
+        unitSpinner.setAdapter(spinnerAdapter);
+        LinearLayout.LayoutParams spinnerParams = new LinearLayout.LayoutParams(
+                android.view.ViewGroup.LayoutParams.WRAP_CONTENT,
+                android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
+        spinnerParams.setMarginStart(density * 8);
+        unitSpinner.setLayoutParams(spinnerParams);
+        row.addView(unitSpinner);
+        layout.addView(row);
 
         RadioGroup radioGroup = new RadioGroup(requireContext());
         String[] mealLabels = {"Bữa sáng", "Bữa trưa", "Bữa tối", "Bữa phụ"};
         String[] mealKeys = {Constants.MEAL_BREAKFAST, Constants.MEAL_LUNCH,
                 Constants.MEAL_DINNER, Constants.MEAL_SNACK};
+        int preSelectedIndex = 3;
+        for (int i = 0; i < mealKeys.length; i++) {
+            if (mealKeys[i].equals(preselectedMealType)) {
+                preSelectedIndex = i;
+                break;
+            }
+        }
+        final int defaultIndex = preSelectedIndex;
         for (int i = 0; i < mealLabels.length; i++) {
             RadioButton rb = new RadioButton(requireContext());
             rb.setText(mealLabels[i]);
             rb.setId(i);
-            if (i == 3) rb.setChecked(true);
+            if (i == defaultIndex) rb.setChecked(true);
             radioGroup.addView(rb);
         }
         layout.addView(radioGroup);
@@ -297,45 +392,52 @@ public class SearchFoodFragment extends Fragment {
 
         builder.setPositiveButton("Lưu", (dialog, which) -> {
             String qtyStr = quantityInput.getText().toString().trim();
-            double quantity;
+            double unitQty;
             try {
-                quantity = qtyStr.isEmpty() ? 100 : Double.parseDouble(qtyStr);
+                unitQty = qtyStr.isEmpty() ? 1 : Double.parseDouble(qtyStr.replace(",", "."));
             } catch (NumberFormatException e) {
                 showError("Khẩu phần không hợp lệ.");
                 return;
             }
-            if (quantity <= 0) {
-                showError("Khẩu phần ăn phải lớn hơn 0 gram.");
+            if (unitQty <= 0) {
+                showError("Khẩu phần ăn phải lớn hơn 0.");
                 return;
             }
+
+            int unitPos = unitSpinner.getSelectedItemPosition();
+            ServingUnit selectedUnit = units.get(unitPos);
+            double grams = unitQty * selectedUnit.getGrams();
+
             int selectedId = radioGroup.getCheckedRadioButtonId();
-            String mealType = mealKeys[selectedId >= 0 ? selectedId : 3];
-            saveMealEntry(product, quantity, mealType);
+            String mealType = mealKeys[selectedId >= 0 ? selectedId : defaultIndex];
+            saveMealEntry(foodName, nutriments, grams, selectedUnit.getLabel(), unitQty, mealType);
         });
 
         builder.setNegativeButton("Hủy", null);
         builder.show();
     }
 
-    private void saveMealEntry(ProductModel product, double quantity, String mealType) {
+    private void saveMealEntry(String foodName, NutrimentsModel nutriments,
+                                double grams, String unitLabel, double unitQty, String mealType) {
         String uid = FirebaseAuth.getInstance().getUid();
         if (uid == null) return;
 
-        NutrimentsModel n = product.getNutriments();
-        double calsPer100 = n != null ? n.getCalories() : 0;
-        double protPer100 = n != null ? n.getProtein() : 0;
-        double carbsPer100 = n != null ? n.getCarbs() : 0;
-        double fatPer100 = n != null ? n.getFat() : 0;
+        double calsPer100 = nutriments != null && nutriments.getCalories() != null ? nutriments.getCalories() : 0;
+        double protPer100 = nutriments != null && nutriments.getProtein() != null ? nutriments.getProtein() : 0;
+        double carbsPer100 = nutriments != null && nutriments.getCarbs() != null ? nutriments.getCarbs() : 0;
+        double fatPer100 = nutriments != null && nutriments.getFat() != null ? nutriments.getFat() : 0;
 
         MacroNutrients calculated = NutritionViewModel.calcNutrition(
-                calsPer100, protPer100, carbsPer100, fatPer100, quantity
+                calsPer100, protPer100, carbsPer100, fatPer100, grams
         );
 
         MealEntryModel meal = new MealEntryModel(
                 null,
-                product.getProductName() != null ? product.getProductName() : "Unknown",
+                foodName != null ? foodName : "Unknown",
                 mealType,
-                quantity,
+                grams,
+                unitLabel != null ? unitLabel : "g",
+                unitQty,
                 calculated.getCalories(),
                 calculated.getProtein(),
                 calculated.getCarbs(),
@@ -352,19 +454,20 @@ public class SearchFoodFragment extends Fragment {
                 .collection("entries")
                 .add(meal)
                 .addOnSuccessListener(documentReference -> {
-                    Bundle result = new Bundle();
-                    result.putBoolean("added", true);
-                    Navigation.findNavController(requireView())
-                            .getPreviousBackStackEntry()
-                            .getSavedStateHandle()
-                            .set("search_result", result);
-                    Navigation.findNavController(requireView()).navigateUp();
+                    binding.tvError.setText("Đã thêm vào nhật ký!");
+                    binding.tvError.setTextColor(androidx.core.content.ContextCompat.getColor(
+                            requireContext(), com.example.moblie_app.R.color.health_success));
+                    binding.tvError.setVisibility(View.VISIBLE);
+                    selectedProduct = null;
+                    binding.cardNutrition.setVisibility(View.GONE);
                 })
                 .addOnFailureListener(e -> showError("Không thể thêm: " + e.getMessage()));
     }
 
     private void showError(String msg) {
         binding.tvError.setText(msg);
+        binding.tvError.setTextColor(androidx.core.content.ContextCompat.getColor(
+                requireContext(), com.example.moblie_app.R.color.health_error));
         binding.tvError.setVisibility(View.VISIBLE);
     }
 
@@ -382,7 +485,7 @@ public class SearchFoodFragment extends Fragment {
     }
 
     // ============================================================
-    // ProductSearchAdapter (nội bộ, tích hợp nút yêu thích)
+    // ProductSearchAdapter
     // ============================================================
     private static class ProductSearchAdapter
             extends RecyclerView.Adapter<ProductSearchAdapter.ViewHolder> {
@@ -416,6 +519,7 @@ public class SearchFoodFragment extends Fragment {
 
         void setFavoriteNames(List<String> names) {
             this.favoriteNames = names != null ? names : new ArrayList<>();
+            notifyDataSetChanged();
         }
 
         private boolean isFavorite(String name) {
@@ -439,10 +543,10 @@ public class SearchFoodFragment extends Fragment {
 
             NutrimentsModel n = product.getNutriments();
             if (n != null) {
-                holder.binding.tvCalories.setText(formatValue(n.getCalories()) + " kcal");
-                holder.binding.tvProtein.setText("P: " + formatValue(n.getProtein()) + "g");
-                holder.binding.tvCarbs.setText("C: " + formatValue(n.getCarbs()) + "g");
-                holder.binding.tvFat.setText("F: " + formatValue(n.getFat()) + "g");
+                holder.binding.tvCalories.setText(n.getCalories() != null ? formatValue(n.getCalories()) + " kcal" : "--");
+                holder.binding.tvProtein.setText("P: " + (n.getProtein() != null ? formatValue(n.getProtein()) : "--") + "g");
+                holder.binding.tvCarbs.setText("C: " + (n.getCarbs() != null ? formatValue(n.getCarbs()) : "--") + "g");
+                holder.binding.tvFat.setText("F: " + (n.getFat() != null ? formatValue(n.getFat()) : "--") + "g");
             } else {
                 holder.binding.tvCalories.setText("--");
                 holder.binding.tvProtein.setText("--");
@@ -458,15 +562,17 @@ public class SearchFoodFragment extends Fragment {
                 holder.binding.tvSource.setVisibility(View.GONE);
             }
 
-            // Cập nhật trạng thái nút yêu thích
             boolean fav = isFavorite(product.getProductName());
-            android.content.res.ColorStateList tint = fav
-                    ? android.content.res.ColorStateList.valueOf(
-                            androidx.core.content.ContextCompat.getColor(
-                                    holder.itemView.getContext(), com.example.moblie_app.R.color.health_error))
-                    : android.content.res.ColorStateList.valueOf(
-                            androidx.core.content.ContextCompat.getColor(
-                                    holder.itemView.getContext(), com.example.moblie_app.R.color.health_text_hint));
+            android.content.res.ColorStateList tint;
+            if (fav) {
+                tint = android.content.res.ColorStateList.valueOf(
+                        androidx.core.content.ContextCompat.getColor(
+                                holder.itemView.getContext(), com.example.moblie_app.R.color.health_mint));
+            } else {
+                tint = android.content.res.ColorStateList.valueOf(
+                        androidx.core.content.ContextCompat.getColor(
+                                holder.itemView.getContext(), com.example.moblie_app.R.color.health_text_hint));
+            }
             holder.binding.btnFavorite.setIconResource(fav
                     ? com.example.moblie_app.R.drawable.ic_heart_filled
                     : com.example.moblie_app.R.drawable.ic_heart_outline);
@@ -485,6 +591,99 @@ public class SearchFoodFragment extends Fragment {
             final ItemSearchProductBinding binding;
 
             ViewHolder(ItemSearchProductBinding binding) {
+                super(binding.getRoot());
+                this.binding = binding;
+            }
+        }
+    }
+
+    // ============================================================
+    // FavoriteAdapter
+    // ============================================================
+    private static class FavoriteAdapter
+            extends RecyclerView.Adapter<FavoriteAdapter.FavViewHolder> {
+
+        interface OnFavItemClickListener {
+            void onItemClick(FavoriteFoodModel fav);
+        }
+
+        interface OnFavHeartClickListener {
+            void onHeartClick(FavoriteFoodModel fav);
+        }
+
+        private final List<FavoriteFoodModel> items = new ArrayList<>();
+        private final OnFavItemClickListener addListener;
+        private final OnFavHeartClickListener heartListener;
+
+        FavoriteAdapter(OnFavItemClickListener addListener,
+                        OnFavHeartClickListener heartListener) {
+            this.addListener = addListener;
+            this.heartListener = heartListener;
+        }
+
+        void submitList(List<FavoriteFoodModel> list) {
+            items.clear();
+            if (list != null) {
+                items.addAll(list);
+            }
+            notifyDataSetChanged();
+        }
+
+        @NonNull
+        @Override
+        public FavViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            ItemFavoriteBinding b = ItemFavoriteBinding.inflate(
+                    LayoutInflater.from(parent.getContext()), parent, false);
+            return new FavViewHolder(b);
+        }
+
+        @Override
+        public void onBindViewHolder(@NonNull FavViewHolder holder, int position) {
+            FavoriteFoodModel fav = items.get(position);
+            holder.binding.tvProductName.setText(fav.getName() != null ? fav.getName() : "(không có tên)");
+
+            double cals = fav.getCalories();
+            double prot = fav.getProtein();
+            double carbs = fav.getCarbs();
+            double fat = fav.getFat();
+
+            boolean hasCals = cals > 0 || (cals == 0 && fav.getCalories() != 0);
+            boolean hasProt = prot > 0 || (prot == 0 && fav.getProtein() != 0);
+            boolean hasCarbs = carbs > 0 || (carbs == 0 && fav.getCarbs() != 0);
+            boolean hasFat = fat > 0 || (fat == 0 && fav.getFat() != 0);
+
+            if (hasCals) {
+                holder.binding.tvCalories.setText(formatValue(cals) + " kcal");
+                holder.binding.tvCalories.setVisibility(View.VISIBLE);
+            } else {
+                holder.binding.tvCalories.setVisibility(View.GONE);
+            }
+
+            holder.binding.tvProtein.setText("P: " + (hasProt ? formatValue(prot) : "--") + "g");
+            holder.binding.tvCarbs.setText("C: " + (hasCarbs ? formatValue(carbs) : "--") + "g");
+            holder.binding.tvFat.setText("F: " + (hasFat ? formatValue(fat) : "--") + "g");
+
+            String source = fav.getSource();
+            if (source != null && !source.isEmpty()) {
+                holder.binding.tvSource.setText(source);
+                holder.binding.tvSource.setVisibility(View.VISIBLE);
+            } else {
+                holder.binding.tvSource.setVisibility(View.GONE);
+            }
+
+            holder.itemView.setOnClickListener(v -> addListener.onItemClick(fav));
+            holder.binding.btnFavorite.setOnClickListener(v -> heartListener.onHeartClick(fav));
+        }
+
+        @Override
+        public int getItemCount() {
+            return items.size();
+        }
+
+        static class FavViewHolder extends RecyclerView.ViewHolder {
+            final ItemFavoriteBinding binding;
+
+            FavViewHolder(ItemFavoriteBinding binding) {
                 super(binding.getRoot());
                 this.binding = binding;
             }

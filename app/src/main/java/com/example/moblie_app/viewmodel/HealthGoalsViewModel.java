@@ -55,7 +55,7 @@ public class HealthGoalsViewModel extends AndroidViewModel {
         int    steps;
 
         try {
-            weight = Double.parseDouble(weightStr.trim());
+            weight = Double.parseDouble(weightStr.trim().replace(",", "."));
             if (weight < 30 || weight > 150) {
                 message.setValue("Cân nặng phải từ 30 đến 150 kg");
                 return;
@@ -66,7 +66,7 @@ public class HealthGoalsViewModel extends AndroidViewModel {
         }
 
         try {
-            calories = Integer.parseInt(caloriesStr.trim());
+            calories = Integer.parseInt(caloriesStr.trim().replace(",", "."));
             if (calories < 800 || calories > 4000) {
                 message.setValue("Calo phải từ 800 đến 4000 kcal");
                 return;
@@ -77,7 +77,7 @@ public class HealthGoalsViewModel extends AndroidViewModel {
         }
 
         try {
-            steps = Integer.parseInt(stepsStr.trim());
+            steps = Integer.parseInt(stepsStr.trim().replace(",", "."));
             if (steps < 1000 || steps > 30000) {
                 message.setValue("Số bước phải từ 1.000 đến 30.000");
                 return;
