@@ -10,13 +10,19 @@
     <color name="health_green_light">#E8F8F2</color>
     <color name="health_green_surface">#F2FCF8</color>
 
+    <!-- Mint Green Accent (#10B981) -->
+    <color name="health_mint">#10B981</color>
+    <color name="health_mint_light">#D1FAE5</color>
+    <color name="health_mint_surface">#ECFDF5</color>
+
     <!-- Neutrals -->
     <color name="health_text_primary">#0D1F1A</color>
     <color name="health_text_secondary">#526B60</color>
     <color name="health_text_hint">#9DB8AD</color>
     <color name="health_divider">#D9EDE5</color>
     <color name="health_card_bg">#FFFFFF</color>
-    <color name="health_bg">#F5FCF9</color>
+    <color name="health_bg">#F3F4F6</color>
+    <color name="health_bg_light">#F9FAFB</color>
 
     <!-- Semantic -->
     <color name="health_error">#E05454</color>

@@ -10,6 +10,9 @@ public class ProductModel {
     @SerializedName("image_url")
     private String imageUrl;
 
+    @SerializedName("serving_size")
+    private String servingSize;
+
     @SerializedName("nutriments")
     private NutrimentsModel nutriments;
 
@@ -25,6 +28,7 @@ public class ProductModel {
 
     public String getProductName()      { return productName; }
     public String getImageUrl()         { return imageUrl; }
+    public String getServingSize()      { return servingSize; }
     public NutrimentsModel getNutriments() { return nutriments; }
     public String getSource()           { return source; }
 

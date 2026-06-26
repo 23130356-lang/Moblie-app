@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?attr/colorSurface"
+    android:background="@color/health_bg"
     android:fillViewport="true">
 
     <LinearLayout
@@ -18,7 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Tổng quan sức khỏe"
-            android:textColor="?attr/colorOnSurface"
+            android:textColor="@color/health_text_primary"
             android:textSize="28sp"
             android:textStyle="bold" />
 
@@ -30,17 +30,18 @@
             android:text="Chào bạn, "
             android:maxLines="1"
             android:ellipsize="end"
-            android:textColor="?attr/colorOnSurfaceVariant"
+            android:textColor="@color/health_text_secondary"
             android:textSize="15sp" />
 
         <!-- Nhật ký ăn uống card -->
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="16dp"
             app:cardCornerRadius="16dp"
-            app:cardElevation="2dp"
-            app:strokeWidth="0dp">
+            app:cardElevation="0dp"
+            app:strokeWidth="0dp"
+            app:cardBackgroundColor="@color/white">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -50,11 +51,13 @@
                 android:padding="20dp">
 
                 <ImageView
-                    android:layout_width="36dp"
-                    android:layout_height="36dp"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:padding="8dp"
+                    android:background="@color/health_mint_light"
                     android:src="@drawable/ic_snack"
                     android:contentDescription="Food"
-                    app:tint="?attr/colorPrimary" />
+                    app:tint="@color/health_mint" />
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -67,7 +70,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Nhật ký ăn uống"
-                        android:textColor="?attr/colorOnSurface"
+                        android:textColor="@color/health_text_primary"
                         android:textSize="17sp"
                         android:textStyle="bold" />
 
@@ -76,7 +79,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
                         android:text="Ghi lại món ăn, theo dõi dinh dưỡng mỗi bữa"
-                        android:textColor="?attr/colorOnSurfaceVariant"
+                        android:textColor="@color/health_text_secondary"
                         android:textSize="13sp"
                         android:maxLines="2" />
                 </LinearLayout>
@@ -84,11 +87,12 @@
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btn_open_food_diary"
                     style="@style/Widget.Material3.Button.IconButton"
-                    android:layout_width="44dp"
-                    android:layout_height="44dp"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
                     android:contentDescription="Mở nhật ký"
                     app:icon="@drawable/ic_arrow_back"
-                    app:iconTint="?attr/colorPrimary"
+                    app:iconTint="@color/health_mint"
+                    app:backgroundTint="@color/health_mint_surface"
                     android:rotation="180" />
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
@@ -99,8 +103,9 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
             app:cardCornerRadius="16dp"
-            app:cardElevation="2dp"
-            app:strokeWidth="0dp">
+            app:cardElevation="0dp"
+            app:strokeWidth="0dp"
+            app:cardBackgroundColor="@color/white">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -110,11 +115,13 @@
                 android:padding="20dp">
 
                 <ImageView
-                    android:layout_width="36dp"
-                    android:layout_height="36dp"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:padding="8dp"
+                    android:background="@color/health_mint_light"
                     android:contentDescription="Activity"
                     app:srcCompat="@drawable/ic_calendar"
-                    app:tint="?attr/colorPrimary" />
+                    app:tint="@color/health_mint" />
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -127,7 +134,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Vận động &amp; Cân nặng"
-                        android:textColor="?attr/colorOnSurface"
+                        android:textColor="@color/health_text_primary"
                         android:textSize="17sp"
                         android:textStyle="bold" />
 
@@ -136,7 +143,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
                         android:text="Bước chân, buổi tập, BMI và thống kê tuần"
-                        android:textColor="?attr/colorOnSurfaceVariant"
+                        android:textColor="@color/health_text_secondary"
                         android:textSize="13sp"
                         android:maxLines="2" />
                 </LinearLayout>
@@ -144,11 +151,12 @@
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btn_open_activity"
                     style="@style/Widget.Material3.Button.IconButton"
-                    android:layout_width="44dp"
-                    android:layout_height="44dp"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
                     android:contentDescription="Mở vận động"
                     app:icon="@drawable/ic_arrow_back"
-                    app:iconTint="?attr/colorPrimary"
+                    app:iconTint="@color/health_mint"
+                    app:backgroundTint="@color/health_mint_surface"
                     android:rotation="180" />
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
@@ -159,8 +167,9 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
             app:cardCornerRadius="16dp"
-            app:cardElevation="2dp"
-            app:strokeWidth="0dp">
+            app:cardElevation="0dp"
+            app:strokeWidth="0dp"
+            app:cardBackgroundColor="@color/white">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -170,11 +179,13 @@
                 android:padding="20dp">
 
                 <ImageView
-                    android:layout_width="36dp"
-                    android:layout_height="36dp"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:padding="8dp"
+                    android:background="@color/health_mint_light"
                     android:contentDescription="Profile"
                     app:srcCompat="@drawable/ic_person"
-                    app:tint="?attr/colorPrimary" />
+                    app:tint="@color/health_mint" />
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -187,7 +198,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Hồ sơ cá nhân"
-                        android:textColor="?attr/colorOnSurface"
+                        android:textColor="@color/health_text_primary"
                         android:textSize="17sp"
                         android:textStyle="bold" />
 
@@ -196,7 +207,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
                         android:text="Thông tin tài khoản, ảnh đại diện, dữ liệu hồ sơ"
-                        android:textColor="?attr/colorOnSurfaceVariant"
+                        android:textColor="@color/health_text_secondary"
                         android:textSize="13sp"
                         android:maxLines="2" />
                 </LinearLayout>
@@ -204,11 +215,12 @@
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btn_open_profile"
                     style="@style/Widget.Material3.Button.IconButton"
-                    android:layout_width="44dp"
-                    android:layout_height="44dp"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
                     android:contentDescription="Xem hồ sơ"
                     app:icon="@drawable/ic_arrow_back"
-                    app:iconTint="?attr/colorPrimary"
+                    app:iconTint="@color/health_mint"
+                    app:backgroundTint="@color/health_mint_surface"
                     android:rotation="180" />
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
@@ -219,8 +231,9 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
             app:cardCornerRadius="16dp"
-            app:cardElevation="2dp"
-            app:strokeWidth="0dp">
+            app:cardElevation="0dp"
+            app:strokeWidth="0dp"
+            app:cardBackgroundColor="@color/white">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -230,11 +243,13 @@
                 android:padding="20dp">
 
                 <ImageView
-                    android:layout_width="36dp"
-                    android:layout_height="36dp"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:padding="8dp"
+                    android:background="@color/health_mint_light"
                     android:contentDescription="Goals"
                     app:srcCompat="@drawable/ic_ai_chat"
-                    app:tint="?attr/colorPrimary" />
+                    app:tint="@color/health_mint" />
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -247,7 +262,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Mục tiêu sức khỏe"
-                        android:textColor="?attr/colorOnSurface"
+                        android:textColor="@color/health_text_primary"
                         android:textSize="17sp"
                         android:textStyle="bold" />
 
@@ -256,7 +271,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
                         android:text="Cân nặng, calo, bước chân mục tiêu mỗi ngày"
-                        android:textColor="?attr/colorOnSurfaceVariant"
+                        android:textColor="@color/health_text_secondary"
                         android:textSize="13sp"
                         android:maxLines="2" />
                 </LinearLayout>
@@ -264,23 +279,25 @@
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btn_open_goals"
                     style="@style/Widget.Material3.Button.IconButton"
-                    android:layout_width="44dp"
-                    android:layout_height="44dp"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
                     android:contentDescription="Mở mục tiêu"
                     app:icon="@drawable/ic_arrow_back"
-                    app:iconTint="?attr/colorPrimary"
+                    app:iconTint="@color/health_mint"
+                    app:backgroundTint="@color/health_mint_surface"
                     android:rotation="180" />
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- Biểu đồ calo card (Chức năng 4) -->
+        <!-- Biểu đồ calo card -->
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
             app:cardCornerRadius="16dp"
-            app:cardElevation="2dp"
-            app:strokeWidth="0dp">
+            app:cardElevation="0dp"
+            app:strokeWidth="0dp"
+            app:cardBackgroundColor="@color/white">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -290,11 +307,13 @@
                 android:padding="20dp">
 
                 <ImageView
-                    android:layout_width="36dp"
-                    android:layout_height="36dp"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:padding="8dp"
+                    android:background="@color/health_mint_light"
                     android:contentDescription="Calorie Chart"
                     app:srcCompat="@drawable/ic_chart"
-                    app:tint="?attr/colorPrimary" />
+                    app:tint="@color/health_mint" />
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -307,7 +326,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/chart_title"
-                        android:textColor="?attr/colorOnSurface"
+                        android:textColor="@color/health_text_primary"
                         android:textSize="17sp"
                         android:textStyle="bold" />
 
@@ -316,7 +335,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
                         android:text="@string/chart_desc"
-                        android:textColor="?attr/colorOnSurfaceVariant"
+                        android:textColor="@color/health_text_secondary"
                         android:textSize="13sp"
                         android:maxLines="2" />
                 </LinearLayout>
@@ -324,23 +343,25 @@
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btn_open_calorie_chart"
                     style="@style/Widget.Material3.Button.IconButton"
-                    android:layout_width="44dp"
-                    android:layout_height="44dp"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
                     android:contentDescription="@string/chart_open"
                     app:icon="@drawable/ic_arrow_back"
-                    app:iconTint="?attr/colorPrimary"
+                    app:iconTint="@color/health_mint"
+                    app:backgroundTint="@color/health_mint_surface"
                     android:rotation="180" />
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- Thực phẩm yêu thích card (Chức năng 5) -->
+        <!-- Thực phẩm yêu thích card -->
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
             app:cardCornerRadius="16dp"
-            app:cardElevation="2dp"
-            app:strokeWidth="0dp">
+            app:cardElevation="0dp"
+            app:strokeWidth="0dp"
+            app:cardBackgroundColor="@color/white">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -350,11 +371,13 @@
                 android:padding="20dp">
 
                 <ImageView
-                    android:layout_width="36dp"
-                    android:layout_height="36dp"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:padding="8dp"
+                    android:background="@color/health_mint_light"
                     android:contentDescription="Favorites"
                     app:srcCompat="@drawable/ic_heart_filled"
-                    app:tint="?attr/colorPrimary" />
+                    app:tint="@color/health_mint" />
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -367,7 +390,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/fav_title"
-                        android:textColor="?attr/colorOnSurface"
+                        android:textColor="@color/health_text_primary"
                         android:textSize="17sp"
                         android:textStyle="bold" />
 
@@ -376,7 +399,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
                         android:text="@string/fav_desc"
-                        android:textColor="?attr/colorOnSurfaceVariant"
+                        android:textColor="@color/health_text_secondary"
                         android:textSize="13sp"
                         android:maxLines="2" />
                 </LinearLayout>
@@ -384,11 +407,12 @@
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btn_open_favorites"
                     style="@style/Widget.Material3.Button.IconButton"
-                    android:layout_width="44dp"
-                    android:layout_height="44dp"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
                     android:contentDescription="@string/fav_title"
                     app:icon="@drawable/ic_arrow_back"
-                    app:iconTint="?attr/colorPrimary"
+                    app:iconTint="@color/health_mint"
+                    app:backgroundTint="@color/health_mint_surface"
                     android:rotation="180" />
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
@@ -401,10 +425,10 @@
             android:layout_height="48dp"
             android:layout_marginTop="28dp"
             android:text="Đăng xuất"
-            android:textColor="?attr/colorError"
+            android:textColor="@color/health_error"
             android:textSize="14sp"
             app:icon="@drawable/ic_logout"
             app:iconGravity="textStart"
-            app:iconTint="?attr/colorError" />
+            app:iconTint="@color/health_error" />
     </LinearLayout>
 </ScrollView>

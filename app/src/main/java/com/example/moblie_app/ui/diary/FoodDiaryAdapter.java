@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.moblie_app.R;
 import com.example.moblie_app.databinding.ItemFoodDiaryBinding;
 import com.example.moblie_app.model.MealEntryModel;
+import com.example.moblie_app.utils.ServingUnit;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -103,8 +104,9 @@ public class FoodDiaryAdapter extends RecyclerView.Adapter<FoodDiaryAdapter.Food
                     "C: %.1f", meal.getCarbs()));
             binding.tvFat.setText(String.format(Locale.getDefault(),
                     "F: %.1f", meal.getFat()));
-            binding.tvQuantity.setText(String.format(Locale.getDefault(),
-                    "Khẩu phần: %.0f g", meal.getQuantity()));
+            String qtyDisplay = ServingUnit.gramsToDisplay(
+                    meal.getQuantity(), meal.getUnitLabel(), meal.getUnitQuantity());
+            binding.tvQuantity.setText("Khẩu phần: " + qtyDisplay);
             binding.btnEdit.setOnClickListener(v -> editListener.onEdit(meal));
             binding.btnDelete.setOnClickListener(v -> deleteListener.onDelete(meal));
 
@@ -114,7 +116,7 @@ public class FoodDiaryAdapter extends RecyclerView.Adapter<FoodDiaryAdapter.Food
             android.content.res.ColorStateList tint = fav
                     ? android.content.res.ColorStateList.valueOf(
                             androidx.core.content.ContextCompat.getColor(
-                                    binding.getRoot().getContext(), R.color.health_error))
+                                    binding.getRoot().getContext(), R.color.health_mint))
                     : android.content.res.ColorStateList.valueOf(
                             androidx.core.content.ContextCompat.getColor(
                                     binding.getRoot().getContext(), R.color.health_text_hint));

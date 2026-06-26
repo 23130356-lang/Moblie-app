@@ -5,28 +5,28 @@ import com.google.gson.annotations.SerializedName;
 public class NutrimentsModel {
 
     @SerializedName("energy-kcal_100g")
-    private double calories;
+    private Double calories;
 
     @SerializedName("proteins_100g")
-    private double protein;
+    private Double protein;
 
     @SerializedName("carbohydrates_100g")
-    private double carbs;
+    private Double carbs;
 
     @SerializedName("fat_100g")
-    private double fat;
+    private Double fat;
 
     public NutrimentsModel() {}
 
-    public NutrimentsModel(double calories, double protein, double carbs, double fat) {
+    public NutrimentsModel(Double calories, Double protein, Double carbs, Double fat) {
         this.calories = calories;
         this.protein = protein;
         this.carbs = carbs;
         this.fat = fat;
     }
 
-    public double getCalories() { return calories; }
-    public double getProtein()  { return protein; }
-    public double getCarbs()    { return carbs; }
-    public double getFat()      { return fat; }
+    public Double getCalories() { return calories; }
+    public Double getProtein()  { return protein; }
+    public Double getCarbs()    { return carbs; }
+    public Double getFat()      { return fat; }
 }

@@ -82,10 +82,10 @@ public class FavoriteFoodViewModel extends BaseViewModel {
     /** Thêm sản phẩm vào yêu thích */
     public void addFavorite(ProductModel product) {
         NutrimentsModel n = product.getNutriments();
-        double cals = n != null ? n.getCalories() : 0;
-        double prot = n != null ? n.getProtein() : 0;
-        double carbs = n != null ? n.getCarbs() : 0;
-        double fat = n != null ? n.getFat() : 0;
+        double cals = n != null && n.getCalories() != null ? n.getCalories() : 0;
+        double prot = n != null && n.getProtein() != null ? n.getProtein() : 0;
+        double carbs = n != null && n.getCarbs() != null ? n.getCarbs() : 0;
+        double fat = n != null && n.getFat() != null ? n.getFat() : 0;
 
         FavoriteFoodModel model = new FavoriteFoodModel(
                 product.getProductName(),

@@ -11,6 +11,9 @@ public class MealEntryModel {
 
     private double quantity;
 
+    private String unitLabel;
+    private double unitQuantity;
+
     private double calories;
     private double protein;
     private double carbs;
@@ -32,11 +35,29 @@ public class MealEntryModel {
                           double fat,
                           long timestamp,
                           String date) {
+        this(foodId, foodName, mealType, quantity, "g", quantity,
+                calories, protein, carbs, fat, timestamp, date);
+    }
+
+    public MealEntryModel(String foodId,
+                          String foodName,
+                          String mealType,
+                          double quantity,
+                          String unitLabel,
+                          double unitQuantity,
+                          double calories,
+                          double protein,
+                          double carbs,
+                          double fat,
+                          long timestamp,
+                          String date) {
 
         this.foodId = foodId;
         this.foodName = foodName;
         this.mealType = mealType;
         this.quantity = quantity;
+        this.unitLabel = unitLabel;
+        this.unitQuantity = unitQuantity;
         this.calories = calories;
         this.protein = protein;
         this.carbs = carbs;
@@ -86,6 +107,12 @@ public class MealEntryModel {
     public void setQuantity(double quantity) {
         this.quantity = quantity;
     }
+
+    public String getUnitLabel() { return unitLabel; }
+    public void setUnitLabel(String unitLabel) { this.unitLabel = unitLabel; }
+
+    public double getUnitQuantity() { return unitQuantity; }
+    public void setUnitQuantity(double unitQuantity) { this.unitQuantity = unitQuantity; }
 
     public double getCalories() {
         return calories;

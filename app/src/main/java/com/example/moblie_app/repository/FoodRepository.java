@@ -34,7 +34,7 @@ public class FoodRepository {
 
     public void searchByName(String query, SearchCallback callback) {
         OpenFoodFactsService ofService = RetrofitClient.getService();
-        ofService.searchByName(query, 1, 25).enqueue(new Callback<SearchResponse>() {
+        ofService.searchByName(query, 1, 25, "process").enqueue(new Callback<SearchResponse>() {
             @Override
             public void onResponse(Call<SearchResponse> call, Response<SearchResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {

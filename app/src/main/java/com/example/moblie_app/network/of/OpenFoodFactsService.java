@@ -14,6 +14,7 @@ public interface OpenFoodFactsService {
     Call<SearchResponse> searchByName(
             @Query("search_terms") String query,
             @Query("json") int json,
-            @Query("page_size") int pageSize
+            @Query("page_size") int pageSize,
+            @Query("action") String action
     );
 }

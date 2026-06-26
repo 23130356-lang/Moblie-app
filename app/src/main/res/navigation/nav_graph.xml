@@ -70,7 +70,12 @@
     <fragment
         android:id="@+id/searchFoodFragment"
         android:name="com.example.moblie_app.ui.search.SearchFoodFragment"
-        android:label="Tìm kiếm món ăn" />
+        android:label="Tìm kiếm món ăn">
+        <argument
+            android:name="mealType"
+            android:defaultValue="snack"
+            app:argType="string" />
+    </fragment>
 
     <fragment
         android:id="@+id/profileFragment"
