@@ -37,6 +37,25 @@
             android:name=".service.StepCounterService"
             android:exported="false"
             android:foregroundServiceType="health" />
+
+        <!-- Nhắc uống nước -->
+        <receiver
+            android:name=".ui.sleep.WaterReminderReceiver"
+            android:exported="false" />
+
+        <!-- Nhắc đi ngủ -->
+        <receiver
+            android:name=".ui.sleep.SleepReminderReceiver"
+            android:exported="false" />
+
+        <!-- FCM push notification -->
+        <service
+            android:name=".service.HealthFcmService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>

@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Override white → màu card tối khi dark mode -->
+    <!-- Giúp tất cả cardBackgroundColor="@color/white" tự đổi sang tối -->
+    <color name="white">#1A3D30</color>
+
     <!-- Health App Primary Palette - Dark Mode -->
     <color name="health_green_primary">#2ECC8F</color>
     <color name="health_green_dark">#0A2B22</color>
@@ -12,8 +16,14 @@
     <color name="health_text_secondary">#B8D6C8</color>
     <color name="health_text_hint">#6A9E8A</color>
     <color name="health_divider">#1F4D3C</color>
-    <color name="health_card_bg">#10352C</color>
+    <color name="health_card_bg">#1A3D30</color>
     <color name="health_bg">#071F1A</color>
+    <color name="health_bg_light">#0D2B22</color>
+
+    <!-- Mint - dark mode vẫn giữ xanh rõ -->
+    <color name="health_mint">#2ECC8F</color>
+    <color name="health_mint_light">#1A4D3C</color>
+    <color name="health_mint_surface">#0D3328</color>
 
     <!-- Semantic -->
     <color name="health_error">#FF8A80</color>
@@ -27,7 +37,7 @@
     <color name="health_fat">#CE93D8</color>
     <color name="health_ai">#81C784</color>
 
-    <!-- Soft backgrounds for macro - Dark Mode (tối hơn, vừa phải) -->
+    <!-- Soft backgrounds for macro - Dark Mode -->
     <color name="health_calorie_bg">#3D2E1A</color>
     <color name="health_protein_bg">#1A2D3D</color>
     <color name="health_carbs_bg">#3D321A</color>
