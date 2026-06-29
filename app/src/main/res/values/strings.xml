@@ -26,4 +26,12 @@
     <string name="fav_added">Đã thêm vào yêu thích</string>
     <string name="fav_removed">Đã xoá khỏi yêu thích</string>
     <string name="fav_empty">Chưa có thực phẩm yêu thích nào</string>
+
+    <!-- Sleep & Water -->
+    <string name="sleep_title">Giấc ngủ &amp; Nước uống</string>
+    <string name="sleep_desc">Nhật ký giấc ngủ, theo dõi lượng nước và đặt nhắc nhở</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Cài đặt</string>
+    <string name="settings_desc">Giao diện, đơn vị đo, quản lý dữ liệu tài khoản</string>
 </resources>
