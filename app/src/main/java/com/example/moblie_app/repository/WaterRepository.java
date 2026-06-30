@@ -6,7 +6,6 @@ import com.example.moblie_app.model.WaterLogModel;
 import com.example.moblie_app.utils.Constants;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
@@ -33,7 +32,6 @@ public class WaterRepository extends BaseRepository {
 
         waterLogsRef(uid)
                 .whereEqualTo("dateKey", dateKey)
-                .orderBy("timestamp", Query.Direction.ASCENDING)
                 .get()
                 .addOnSuccessListener(snapshot -> {
                     List<WaterLogModel> logs = new ArrayList<>();
@@ -42,6 +40,8 @@ public class WaterRepository extends BaseRepository {
                         log.setId(doc.getId());
                         logs.add(log);
                     }
+                    // Sắp xếp theo timestamp tăng dần phía client, không cần Firestore index
+                    logs.sort((a, b) -> Long.compare(a.getTimestamp(), b.getTimestamp()));
                     result.setValue(logs);
                 })
                 .addOnFailureListener(e -> error.setValue(e.getMessage()));

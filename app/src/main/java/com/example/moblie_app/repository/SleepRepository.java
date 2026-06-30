@@ -10,7 +10,6 @@ import com.example.moblie_app.model.SleepLogModel;
 import com.example.moblie_app.utils.Constants;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
@@ -42,7 +41,6 @@ public class SleepRepository extends BaseRepository {
         if (uid == null) return;
 
         sleepLogsRef(uid)
-                .orderBy("timestamp", Query.Direction.DESCENDING)
                 .get()
                 .addOnSuccessListener(snapshot -> {
                     List<SleepLogModel> logs = new ArrayList<>();
@@ -51,6 +49,8 @@ public class SleepRepository extends BaseRepository {
                         log.setId(doc.getId());
                         logs.add(log);
                     }
+                    // Sắp xếp mới nhất trước phía client
+                    logs.sort((a, b) -> Long.compare(b.getTimestamp(), a.getTimestamp()));
                     result.setValue(logs);
                     cacheSleepLogs(logs);
                 })
@@ -67,7 +67,6 @@ public class SleepRepository extends BaseRepository {
         if (uid == null) return;
 
         sleepLogsRef(uid)
-                .orderBy("timestamp", Query.Direction.DESCENDING)
                 .limit(count)
                 .get()
                 .addOnSuccessListener(snapshot -> {
@@ -77,7 +76,9 @@ public class SleepRepository extends BaseRepository {
                         log.setId(doc.getId());
                         logs.add(log);
                     }
-                    Collections.reverse(logs); // cũ → mới cho biểu đồ
+                    // Sắp xếp: mới nhất trước, rồi đảo lại cho biểu đồ (cũ → mới)
+                    logs.sort((a, b) -> Long.compare(b.getTimestamp(), a.getTimestamp()));
+                    Collections.reverse(logs);
                     result.setValue(logs);
                 })
                 .addOnFailureListener(e ->

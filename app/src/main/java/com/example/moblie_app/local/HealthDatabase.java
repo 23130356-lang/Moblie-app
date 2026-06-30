@@ -78,6 +78,7 @@ public abstract class HealthDatabase extends RoomDatabase {
                                     HealthDatabase.class,
                                     "health_cache.db")
                             .addMigrations(MIGRATION_1_2, MIGRATION_2_3)
+                            .fallbackToDestructiveMigrationOnDowngrade()
                             .fallbackToDestructiveMigration()
                             .build();
                 }

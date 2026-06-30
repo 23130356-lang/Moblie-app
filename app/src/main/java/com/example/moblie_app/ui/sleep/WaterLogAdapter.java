@@ -3,7 +3,6 @@ package com.example.moblie_app.ui.sleep;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -14,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.moblie_app.R;
 import com.example.moblie_app.model.WaterLogModel;
 import com.example.moblie_app.utils.DateUtils;
+import com.google.android.material.button.MaterialButton;
 
 import java.util.Locale;
 
@@ -47,9 +47,9 @@ public class WaterLogAdapter extends ListAdapter<WaterLogModel, WaterLogAdapter.
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-        private final TextView  tvAmount;
-        private final TextView  tvTime;
-        private final ImageButton btnDelete;
+        private final TextView      tvAmount;
+        private final TextView      tvTime;
+        private final MaterialButton btnDelete;
 
         ViewHolder(@NonNull View itemView) {
             super(itemView);
