@@ -99,8 +99,11 @@ public class LoginFragment extends Fragment {
         });
 
         binding.btnGoogle.setOnClickListener(v -> {
-            Intent signInIntent = googleSignInClient.getSignInIntent();
-            startActivityForResult(signInIntent, RC_SIGN_IN);
+            // Xoá tài khoản đã cache để luôn hiện hộp thoại chọn tài khoản Google
+            googleSignInClient.signOut().addOnCompleteListener(task -> {
+                Intent signInIntent = googleSignInClient.getSignInIntent();
+                startActivityForResult(signInIntent, RC_SIGN_IN);
+            });
         });
 
         binding.tvGoRegister.setOnClickListener(v ->
