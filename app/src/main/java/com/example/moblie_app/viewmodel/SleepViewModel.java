@@ -17,7 +17,6 @@ import com.example.moblie_app.utils.SleepAnalyzer;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * SleepViewModel – xử lý logic của màn hình Giấc ngủ & Nước.
@@ -71,31 +70,11 @@ public class SleepViewModel extends BaseViewModel {
     // ─── Load ────────────────────────────────────────────────────
 
     public void loadAll() {
-        // Đếm 3 request async – chỉ tắt loading khi tất cả về xong
-        AtomicInteger pending = new AtomicInteger(3);
         setLoading(true);
-
-        MutableLiveData<List<SleepLogModel>> tempAll    = new MutableLiveData<>();
-        MutableLiveData<List<SleepLogModel>> tempRecent = new MutableLiveData<>();
-        MutableLiveData<List<WaterLogModel>> tempWater  = new MutableLiveData<>();
-
-        tempAll.observeForever(logs -> {
-            sleepLogs.postValue(logs);
-            if (pending.decrementAndGet() == 0) setLoadingPost(false);
-        });
-        tempRecent.observeForever(logs -> {
-            recentSleepLogs.postValue(logs);
-            if (pending.decrementAndGet() == 0) setLoadingPost(false);
-        });
-        tempWater.observeForever(logs -> {
-            waterLogs.postValue(logs);
-            refreshTotalWater(logs);
-            if (pending.decrementAndGet() == 0) setLoadingPost(false);
-        });
-
-        sleepRepository.loadSleepLogs(tempAll, errorMessage);
-        sleepRepository.loadRecentSleepLogs(RECENT_LOG_COUNT, tempRecent, errorMessage);
-        waterRepository.loadWaterLogs(DateUtils.getTodayKey(), tempWater, errorMessage);
+        sleepRepository.loadSleepLogs(sleepLogs, errorMessage);
+        sleepRepository.loadRecentSleepLogs(RECENT_LOG_COUNT, recentSleepLogs, errorMessage);
+        waterRepository.loadWaterLogs(DateUtils.getTodayKey(), waterLogs, errorMessage);
+        // Không gọi setLoadingPost ở đây vì async chưa xong
     }
 
     /** Gọi khi waterLogs thay đổi để tính tổng mới. */

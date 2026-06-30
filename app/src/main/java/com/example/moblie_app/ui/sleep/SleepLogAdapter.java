@@ -3,7 +3,6 @@ package com.example.moblie_app.ui.sleep;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -14,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.moblie_app.R;
 import com.example.moblie_app.model.SleepLogModel;
 import com.example.moblie_app.utils.SleepAnalyzer;
+import com.google.android.material.button.MaterialButton;
 
 import java.util.Locale;
 
@@ -47,12 +47,12 @@ public class SleepLogAdapter extends ListAdapter<SleepLogModel, SleepLogAdapter.
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-        private final TextView tvDate;
-        private final TextView tvTime;
-        private final TextView tvDuration;
-        private final TextView tvQuality;
-        private final TextView tvNote;
-        private final ImageButton btnDelete;
+        private final TextView       tvDate;
+        private final TextView       tvTime;
+        private final TextView       tvDuration;
+        private final TextView       tvQuality;
+        private final TextView       tvNote;
+        private final MaterialButton btnDelete;
 
         ViewHolder(@NonNull View itemView) {
             super(itemView);

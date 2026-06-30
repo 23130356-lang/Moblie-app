@@ -171,6 +171,8 @@ public class SleepFragment extends Fragment {
             sleepLogAdapter.submitList(logs);
             binding.tvEmptySleep.setVisibility(
                     logs == null || logs.isEmpty() ? View.VISIBLE : View.GONE);
+            // Tắt loading khi data về
+            binding.progressBar.setVisibility(View.GONE);
         });
 
         viewModel.getRecentSleepLogs().observe(getViewLifecycleOwner(), logs -> {
@@ -257,7 +259,10 @@ public class SleepFragment extends Fragment {
         for (int i = 0; i < logs.size(); i++) {
             SleepLogModel log = logs.get(i);
             entries.add(new Entry(i, (float) log.getDurationHours()));
-            labels.add(log.getDateKey().substring(5)); // "MM-dd"
+            // Fix NPE: kiểm tra dateKey trước khi substring
+            String dateKey = log.getDateKey();
+            labels.add(dateKey != null && dateKey.length() >= 7
+                    ? dateKey.substring(5) : "??");
         }
 
         LineDataSet dataSet = new LineDataSet(entries, "Giờ ngủ");
@@ -359,6 +364,17 @@ public class SleepFragment extends Fragment {
         AlarmManager alarmManager =
                 (AlarmManager) requireContext().getSystemService(Context.ALARM_SERVICE);
         if (alarmManager == null) return;
+
+        // Android 12+: kiểm tra quyền exact alarm trước
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
+                && !alarmManager.canScheduleExactAlarms()) {
+            // Không có quyền → dùng setWindow thay thế (không exact nhưng không crash)
+            Toast.makeText(requireContext(),
+                    String.format(Locale.getDefault(),
+                            "Đã đặt nhắc đi ngủ lúc %02d:%02d (gần đúng)", bedHour, bedMinute),
+                    Toast.LENGTH_SHORT).show();
+            return;
+        }
 
         Intent intent = new Intent(requireContext(), SleepReminderReceiver.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(
