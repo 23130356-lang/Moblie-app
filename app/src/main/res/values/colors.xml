@@ -10,16 +10,46 @@
     <color name="health_green_light">#E8F8F2</color>
     <color name="health_green_surface">#F2FCF8</color>
 
+    <!-- Mint Green Accent (#10B981) -->
+    <color name="health_mint">#10B981</color>
+    <color name="health_mint_light">#D1FAE5</color>
+    <color name="health_mint_surface">#ECFDF5</color>
+
     <!-- Neutrals -->
     <color name="health_text_primary">#0D1F1A</color>
     <color name="health_text_secondary">#526B60</color>
     <color name="health_text_hint">#9DB8AD</color>
     <color name="health_divider">#D9EDE5</color>
     <color name="health_card_bg">#FFFFFF</color>
-    <color name="health_bg">#F5FCF9</color>
+    <color name="health_bg">#F3F4F6</color>
+    <color name="health_bg_light">#F9FAFB</color>
 
     <!-- Semantic -->
     <color name="health_error">#E05454</color>
     <color name="health_success">#2ECC8A</color>
     <color name="health_warning">#F5A623</color>
+
+    <!-- Macro Nutrient Colors - softer, modern -->
+    <color name="health_calorie">#E67E22</color>
+    <color name="health_protein">#3498DB</color>
+    <color name="health_carbs">#F39C12</color>
+    <color name="health_fat">#8E44AD</color>
+    <color name="health_ai">#4CAF50</color>
+
+    <!-- Soft backgrounds for macro -->
+    <color name="health_calorie_bg">#FFF3E0</color>
+    <color name="health_protein_bg">#E3F2FD</color>
+    <color name="health_carbs_bg">#FFF8E1</color>
+    <color name="health_fat_bg">#F3E5F5</color>
+
+    <!-- Chat bubble colors - AI -->
+    <color name="health_chat_bg_ai">#F0F0F0</color>
+    <color name="health_chat_text_ai">#1F2937</color>
+
+    <!-- Chat bubble colors - Error -->
+    <color name="health_chat_bg_error">#FFF0F0</color>
+    <color name="health_chat_text_error">#C62828</color>
+
+    <!-- Chat input bar -->
+    <color name="health_chat_input_stroke">#C8E6D9</color>
 </resources>

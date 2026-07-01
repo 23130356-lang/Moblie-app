@@ -12,7 +12,20 @@
           "package_name": "com.example.moblie_app"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "909986797213-ac846k8ug8fqn8hcjrungraep9jseccm.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.moblie_app",
+            "certificate_hash": "67a2ee2b7009e592920106fc5df7beb1327186cd"
+          }
+        },
+        {
+          "client_id": "909986797213-5q2r3u893diheean5v49skgpdbd00c2i.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyBujbS7HMvcf6-EuiCdndyUtxcWTNZwSaw"
@@ -20,7 +33,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "909986797213-5q2r3u893diheean5v49skgpdbd00c2i.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

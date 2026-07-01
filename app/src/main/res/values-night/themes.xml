@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <style name="Base.Theme.Moblie_app" parent="Theme.Material3.DayNight.NoActionBar">
-        <item name="colorPrimary">#2ECC8A</item>
-        <item name="colorOnPrimary">#FFFFFF</item>
-        <item name="colorPrimaryContainer">#0D3B2E</item>
-        <item name="colorOnPrimaryContainer">#A8F0CF</item>
-        <item name="colorSurface">#0F1F19</item>
-        <item name="colorOnSurface">#E0F5EC</item>
-        <item name="colorOnSurfaceVariant">#7FB89A</item>
-        <item name="android:colorBackground">#0A1912</item>
-        <item name="colorError">#FF7070</item>
-        <item name="android:windowBackground">#0A1912</item>
+        <item name="colorPrimary">@color/health_green_primary</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorPrimaryContainer">@color/health_green_light</item>
+        <item name="colorOnPrimaryContainer">@color/health_green_primary</item>
+        <item name="colorSecondary">@color/health_green_medium</item>
+        <item name="colorSurface">@color/health_bg</item>
+        <item name="colorOnSurface">@color/health_text_primary</item>
+        <item name="colorOnSurfaceVariant">@color/health_text_secondary</item>
+        <item name="android:colorBackground">@color/health_bg</item>
+        <item name="android:windowBackground">@color/health_bg</item>
+        <item name="colorError">@color/health_error</item>
     </style>
 </resources>

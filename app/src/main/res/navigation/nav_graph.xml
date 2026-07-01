@@ -47,6 +47,40 @@
         <action
             android:id="@+id/action_dashboard_to_goals"
             app:destination="@id/healthGoalsFragment" />
+        <action
+            android:id="@+id/action_dashboard_to_food_diary"
+            app:destination="@id/foodDiaryFragment" />
+        <action
+            android:id="@+id/action_dashboard_to_calorie_chart"
+            app:destination="@id/calorieChartFragment" />
+        <action
+            android:id="@+id/action_dashboard_to_search_food"
+            app:destination="@id/searchFoodFragment" />
+        <action
+            android:id="@+id/action_dashboard_to_sleep"
+            app:destination="@id/sleepFragment" />
+        <action
+            android:id="@+id/action_dashboard_to_settings"
+            app:destination="@id/settingsFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/foodDiaryFragment"
+        android:name="com.example.moblie_app.ui.diary.FoodDiaryFragment"
+        android:label="Nhật ký ăn uống">
+        <action
+            android:id="@+id/action_foodDiary_to_searchFood"
+            app:destination="@id/searchFoodFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/searchFoodFragment"
+        android:name="com.example.moblie_app.ui.search.SearchFoodFragment"
+        android:label="Tìm kiếm món ăn">
+        <argument
+            android:name="mealType"
+            android:defaultValue="snack"
+            app:argType="string" />
     </fragment>
 
     <fragment
@@ -78,5 +112,30 @@
         android:id="@+id/activityFragment"
         android:name="com.example.moblie_app.ui.activity.ActivityFragment"
         android:label="Vận động &amp; Cân nặng" />
+
+    <fragment
+        android:id="@+id/calorieChartFragment"
+        android:name="com.example.moblie_app.ui.caloriechart.CalorieChartFragment"
+        android:label="@string/chart_title" />
+
+    <fragment
+        android:id="@+id/aiChatFragment"
+        android:name="com.example.moblie_app.ui.aichat.AiChatFragment"
+        android:label="AI tư vấn sức khỏe" />
+
+    <fragment
+        android:id="@+id/sleepFragment"
+        android:name="com.example.moblie_app.ui.sleep.SleepFragment"
+        android:label="Giấc ngủ &amp; Nước uống" />
+
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.example.moblie_app.ui.settings.SettingsFragment"
+        android:label="Cài đặt" />
+
+    <!-- Action toàn cục: cho phép mở AI Chat từ bất kỳ màn hình nào (FAB ở MainActivity) -->
+    <action
+        android:id="@+id/action_global_aiChatFragment"
+        app:destination="@id/aiChatFragment" />
 
 </navigation>

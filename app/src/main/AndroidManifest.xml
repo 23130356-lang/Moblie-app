@@ -2,13 +2,17 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_HEALTH" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"
         android:maxSdkVersion="32" />
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+    <uses-permission android:name="android.permission.USE_EXACT_ALARM" />
 
     <application
         android:allowBackup="true"
@@ -30,10 +34,30 @@
             </intent-filter>
         </activity>
 
+
         <service
             android:name=".service.StepCounterService"
             android:exported="false"
             android:foregroundServiceType="health" />
+
+        <!-- Nhắc uống nước -->
+        <receiver
+            android:name=".ui.sleep.WaterReminderReceiver"
+            android:exported="false" />
+
+        <!-- Nhắc đi ngủ -->
+        <receiver
+            android:name=".ui.sleep.SleepReminderReceiver"
+            android:exported="false" />
+
+        <!-- FCM push notification -->
+        <service
+            android:name=".service.HealthFcmService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>

@@ -24,12 +24,19 @@
         <item name="cornerSize">50%</item>
     </style>
 
-    <!-- Card style -->
+    <!-- Card style - modern M3: bo góc lớn, đổ bóng nhẹ, KHÔNG viền -->
     <style name="HealthCard" parent="Widget.Material3.CardView.Elevated">
         <item name="cardCornerRadius">20dp</item>
-        <item name="cardElevation">0dp</item>
-        <item name="strokeWidth">1dp</item>
-        <item name="strokeColor">@color/health_divider</item>
+        <item name="cardElevation">2dp</item>
+        <item name="strokeWidth">0dp</item>
+        <item name="cardBackgroundColor">@color/health_card_bg</item>
+    </style>
+
+    <!-- Small info card không viền -->
+    <style name="HealthCard.Small" parent="Widget.Material3.CardView.Elevated">
+        <item name="cardCornerRadius">16dp</item>
+        <item name="cardElevation">1dp</item>
+        <item name="strokeWidth">0dp</item>
         <item name="cardBackgroundColor">@color/health_card_bg</item>
     </style>
 

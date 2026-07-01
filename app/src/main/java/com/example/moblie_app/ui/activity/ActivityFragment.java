@@ -7,7 +7,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -95,7 +94,7 @@ public class ActivityFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         viewModel = new ViewModelProvider(
                 this,
-                new ActivityViewModel.Factory(requireContext()))
+                new ActivityViewModel.Factory(requireActivity().getApplication()))
                 .get(ActivityViewModel.class);
         googleFitRepository = new GoogleFitRepository();
         fitnessOptions = FitnessOptions.builder()
@@ -301,7 +300,7 @@ public class ActivityFragment extends Fragment {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             requireContext().registerReceiver(stepReceiver, filter, Context.RECEIVER_NOT_EXPORTED);
         } else {
-            requireContext().registerReceiver(stepReceiver, filter);
+            ContextCompat.registerReceiver(requireContext(), stepReceiver, filter, ContextCompat.RECEIVER_NOT_EXPORTED);
         }
         receiverRegistered = true;
     }
@@ -367,13 +366,20 @@ public class ActivityFragment extends Fragment {
         chart.getLegend().setEnabled(false);
         chart.getAxisRight().setEnabled(false);
         chart.getAxisLeft().setAxisMinimum(0f);
+        chart.getAxisLeft().setDrawGridLines(false);
+        chart.getAxisLeft().setDrawLabels(false);
+        chart.getAxisLeft().setAxisLineWidth(0f);
         chart.setFitBars(true);
         chart.setNoDataText("Chưa có dữ liệu bước chân");
+        chart.setDrawValueAboveBar(false);
 
         XAxis xAxis = chart.getXAxis();
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
         xAxis.setGranularity(1f);
         xAxis.setDrawGridLines(false);
+        xAxis.setAxisLineWidth(0f);
+        xAxis.setTextSize(11f);
+        xAxis.setTextColor(android.graphics.Color.parseColor("#9CA3AF"));
     }
 
     private void updateChart(WeeklyActivityStats stats) {
@@ -387,17 +393,18 @@ public class ActivityFragment extends Fragment {
         List<DailyActivityStat> dailyStats = stats.getDailyStats();
         for (int i = 0; i < dailyStats.size(); i++) {
             DailyActivityStat day = dailyStats.get(i);
-            entries.add(new BarEntry(i, day.getSteps()));
+            entries.add(new BarEntry(i, Math.max(day.getSteps(), 0)));
             labels.add(day.getLabel());
         }
 
         BarDataSet dataSet = new BarDataSet(entries, "Bước chân");
-        dataSet.setColor(Color.rgb(46, 125, 50));
-        dataSet.setValueTextColor(Color.rgb(60, 60, 60));
-        dataSet.setValueTextSize(10f);
+        dataSet.setColor(android.graphics.Color.parseColor("#10B981"));
+        dataSet.setDrawValues(false);
+        dataSet.setBarBorderWidth(0f);
+        dataSet.setHighLightAlpha(0);
 
         BarData data = new BarData(dataSet);
-        data.setBarWidth(0.55f);
+        data.setBarWidth(0.6f);
 
         binding.barChart.getXAxis().setValueFormatter(new IndexAxisValueFormatter(labels));
         binding.barChart.setData(data);

@@ -1,39 +1,41 @@
 package com.example.moblie_app.viewmodel;
 
+import android.app.Application;
+import android.content.Context;
+
+import androidx.annotation.NonNull;
+import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 
-/**
- * BaseViewModel - tất cả ViewModel trong dự án đều extends class này.
- * Chứa các LiveData dùng chung: loading state và error message.
- */
-public class BaseViewModel extends ViewModel {
+// FIX: đổi sang AndroidViewModel để có thể cung cấp Application Context cho Repository
+public class BaseViewModel extends AndroidViewModel {
 
-    // Trạng thái loading (true = đang tải, false = xong)
-    protected final MutableLiveData<Boolean> isLoading = new MutableLiveData<>(false);
+    protected final MutableLiveData<Boolean> isLoading    = new MutableLiveData<>(false);
+    protected final MutableLiveData<String>  errorMessage = new MutableLiveData<>();
 
-    // Thông báo lỗi
-    protected final MutableLiveData<String> errorMessage = new MutableLiveData<>();
-
-    public MutableLiveData<Boolean> getIsLoading() {
-        return isLoading;
+    public BaseViewModel(@NonNull Application application) {
+        super(application);
     }
 
-    public MutableLiveData<String> getErrorMessage() {
-        return errorMessage;
+    /** Lấy Application Context (dùng để khởi tạo Repository cần Context) */
+    protected Context getAppContext() {
+        return getApplication().getApplicationContext();
     }
 
+    public MutableLiveData<Boolean> getIsLoading()    { return isLoading; }
+    public MutableLiveData<String>  getErrorMessage() { return errorMessage; }
+
+    /** Gọi từ main thread */
     protected void setLoading(boolean loading) {
         isLoading.setValue(loading);
     }
 
-    protected void setError(String message) {
-        errorMessage.setValue(message);
+    /** Gọi an toàn từ background thread */
+    protected void setLoadingPost(boolean loading) {
+        isLoading.postValue(loading);
     }
 
-    @Override
-    protected void onCleared() {
-        super.onCleared();
-        // Giải phóng tài nguyên khi ViewModel bị destroy
+    protected void setError(String message) {
+        errorMessage.setValue(message);
     }
 }
