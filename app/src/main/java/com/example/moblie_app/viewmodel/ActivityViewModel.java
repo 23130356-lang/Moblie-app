@@ -8,9 +8,11 @@ import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.moblie_app.model.ActivityLogModel;
+import com.example.moblie_app.model.HealthGoalsModel;
 import com.example.moblie_app.model.WeeklyActivityStats;
 import com.example.moblie_app.model.WeightLogModel;
 import com.example.moblie_app.repository.ActivityRepository;
+import com.example.moblie_app.repository.HealthGoalsRepository;
 import com.example.moblie_app.utils.BmiCalculator;
 import com.example.moblie_app.utils.DateUtils;
 import com.example.moblie_app.utils.ValidationUtils;
@@ -21,6 +23,7 @@ import java.util.List;
 public class ActivityViewModel extends BaseViewModel {
 
     private final ActivityRepository repository;
+    private final HealthGoalsRepository goalsRepository;
     private final MutableLiveData<List<ActivityLogModel>> activityLogs =
             new MutableLiveData<>(new ArrayList<>());
     private final MutableLiveData<List<WeightLogModel>> weightLogs =
@@ -29,9 +32,12 @@ public class ActivityViewModel extends BaseViewModel {
             new MutableLiveData<>(new WeeklyActivityStats());
     private final MutableLiveData<Boolean> actionDone = new MutableLiveData<>(false);
     private final MutableLiveData<Integer> liveSteps = new MutableLiveData<>(0);
+    private final MutableLiveData<Integer> stepGoal =
+            new MutableLiveData<>(HealthGoalsModel.DEFAULT_STEPS);
 
     public ActivityViewModel(Context context) {
         repository = new ActivityRepository(context.getApplicationContext());
+        goalsRepository = new HealthGoalsRepository(context.getApplicationContext());
     }
 
     public MutableLiveData<List<ActivityLogModel>> getActivityLogs() {
@@ -54,12 +60,23 @@ public class ActivityViewModel extends BaseViewModel {
         return liveSteps;
     }
 
+    public MutableLiveData<Integer> getStepGoal() {
+        return stepGoal;
+    }
+
     public void loadAll() {
         setLoading(true);
+        refreshStepGoal();
         repository.loadActivityLogs(activityLogs, errorMessage);
         repository.loadWeightLogs(weightLogs, errorMessage);
         repository.loadWeeklyStats(weeklyStats, errorMessage);
         setLoading(false);
+    }
+
+    public void refreshStepGoal() {
+        HealthGoalsModel goals = goalsRepository.loadFromPrefs();
+        int targetSteps = goals != null ? goals.getTargetSteps() : HealthGoalsModel.DEFAULT_STEPS;
+        stepGoal.setValue(targetSteps > 0 ? targetSteps : HealthGoalsModel.DEFAULT_STEPS);
     }
 
     public void setLiveSteps(int steps) {

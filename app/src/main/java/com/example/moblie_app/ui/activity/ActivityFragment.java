@@ -55,7 +55,6 @@ public class ActivityFragment extends Fragment {
 
     private static final int REQUEST_ACTIVITY_PERMISSIONS = 3201;
     private static final int REQUEST_GOOGLE_FIT = 3202;
-    private static final int DEFAULT_STEP_GOAL = 8000;
 
     private FragmentActivityBinding binding;
     private ActivityViewModel viewModel;
@@ -114,6 +113,7 @@ public class ActivityFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
+        viewModel.refreshStepGoal();
         registerStepReceiver();
     }
 
@@ -165,7 +165,11 @@ public class ActivityFragment extends Fragment {
             }
         });
 
-        viewModel.getLiveSteps().observe(getViewLifecycleOwner(), this::updateStepViews);
+        viewModel.getLiveSteps().observe(getViewLifecycleOwner(), steps ->
+                updateStepViews(steps, currentStepGoal()));
+
+        viewModel.getStepGoal().observe(getViewLifecycleOwner(), goal ->
+                updateStepViews(currentSteps(), goal));
 
         viewModel.getActivityLogs().observe(getViewLifecycleOwner(), logs -> {
             activityLogAdapter.submitList(logs);
@@ -310,13 +314,23 @@ public class ActivityFragment extends Fragment {
         receiverRegistered = false;
     }
 
-    private void updateStepViews(int steps) {
-        int progress = StepGoalTracker.progressPercent(steps, DEFAULT_STEP_GOAL);
-        int remaining = StepGoalTracker.remainingSteps(steps, DEFAULT_STEP_GOAL);
+    private void updateStepViews(int steps, int goal) {
+        int progress = StepGoalTracker.progressPercent(steps, goal);
+        int remaining = StepGoalTracker.remainingSteps(steps, goal);
         binding.tvStepCount.setText(String.format(Locale.getDefault(), "%,d bước", steps));
         binding.tvStepGoal.setText(String.format(Locale.getDefault(),
-                "Đạt %d%% mục tiêu · còn %,d bước", progress, remaining));
+                "Đạt %d%% mục tiêu %,d bước · còn %,d bước", progress, goal, remaining));
         binding.progressSteps.setProgress(progress);
+    }
+
+    private int currentSteps() {
+        Integer steps = viewModel.getLiveSteps().getValue();
+        return steps != null ? steps : 0;
+    }
+
+    private int currentStepGoal() {
+        Integer goal = viewModel.getStepGoal().getValue();
+        return goal != null ? goal : 0;
     }
 
     private void updateLatestBmi(List<WeightLogModel> logs) {
